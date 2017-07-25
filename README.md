@@ -1,6 +1,6 @@
 # yedu
 
-> A Vue.js project
+> vue
 
 ## Build Setup
 
