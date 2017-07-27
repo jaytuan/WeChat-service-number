@@ -3,8 +3,14 @@
     <div class="personalHeader">
     </div>
     <div class="readSome">
-      
+      <div class="duration">阅读时长<label>{{duration}}</label>小时</div>
+      <div class="line"></div>
+      <div class="days">已签到<label>{{days}}</label>天</div>
     </div>
+     <div class="notesTitle">阅读笔记</div>
+     <div class="notesList" v-for="item in list">
+       {{item.notetitle}}
+     </div>
   </div>
 </template>
 
@@ -13,7 +19,34 @@ export default {
   name: 'personalCenter',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      duration:"128",
+      days:"3",
+      list:[{
+        "id":"0",
+        "notetitle":"Hello",
+        "goodcounts":'9',
+        "notecontent":"hello world",
+        "time": "2017.10.11",
+      },{
+         "id":"1",
+        "notetitle":"Hello",
+        "goodcounts":'9',
+        "notecontent":"hello world",
+        "time": "2017.10.11",
+      },{
+         "id":"2",
+        "notetitle":"Hello",
+        "goodcounts":'9',
+        "notecontent":"hello world",
+        "time": "2017.10.11",
+      },{
+         "id":"3",
+        "notetitle":"Hello",
+        "goodcounts":'9',
+        "notecontent":"hello world",
+        "time": "2017.10.11",
+      }]
     }
   }
 }
@@ -39,5 +72,43 @@ export default {
   border-radius: 10px;
   background-color: #fff;
   box-shadow: 0 8px 8px #e2dfdf;
+  overflow: hidden;
+}
+.readSome div {
+  float: left;
+  
+  font-family: STHeitiSC-Medium;
+  font-size: 32px;
+  color: #5E626C;
+  line-height: 88px;
+}
+.duration {
+  width: 359px;
+  height: 88px;
+}
+.line {
+  height: 69.4px;
+  width: 1px;
+  border:0;
+  background-color: #B8B8B8;
+  margin-top: 9px;
+  margin-bottom: 9.6px;
+}
+.days {
+  width: 358px;
+  height: 88px;
+}
+.readSome div label {
+  color: #8CC2FD;
+}
+.notesTitle {
+  font-family: STHeitiSC-Medium;
+  font-size: 30px;
+  color: #333;
+  letter-spacing: 0.55px;
+  padding-left: 30px;
+  text-align: left;
+  margin-top: 74px;
+  padding-bottom: 16px;
 }
 </style>
