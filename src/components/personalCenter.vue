@@ -9,7 +9,11 @@
     </div>
      <div class="notesTitle">阅读笔记</div>
      <div class="notesList" v-for="item in list">
-       {{item.notetitle}}
+       <div class="contentHeader">
+         <div class="contentTitle">
+           {{item.notetitle}}
+         </div>
+       </div>
      </div>
   </div>
 </template>
@@ -110,5 +114,9 @@ export default {
   text-align: left;
   margin-top: 74px;
   padding-bottom: 16px;
+}
+.notesList {
+  margin-bottom: 20px;
+  background-color: #fff;
 }
 </style>
