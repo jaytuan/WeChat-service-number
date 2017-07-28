@@ -1,5 +1,10 @@
 <template>
   <div class="hello">
+    <div class="page_head">
+        <div class="flex_one" v-html="userHeadImg"></div>
+        <div class="flex_two"></div>
+        <div class="flex_one"></div>
+    </div>
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
     <ul>
@@ -25,7 +30,13 @@ export default {
   name: 'hello',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+    }
+  },
+  computed: {
+    userHeadImg: function () {
+      var headImgurl = 'E:/my project/A项目任务/GitHub/yedu/WeChat-service-number/src/assets/head.png';
+      return '<img src= '+ headImgurl +'/>';
     }
   }
 }
@@ -49,5 +60,20 @@ li {
 
 a {
   color: #42b983;
+}
+.page_head{
+  height:124px;
+  width:100%;
+  display:flex;
+}
+.flex_one{
+  flex:1;
+  background:#ccc;
+}
+.flex_two{
+  flex:2;
+}
+.user_head_img{
+   background: url("E:/my project/A项目任务/GitHub/yedu/WeChat-service-number/src/assets/head.png") no-repeat;
 }
 </style>
