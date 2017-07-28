@@ -1,10 +1,12 @@
 <template>
   <div class="hello">
+  <div class="top_page">
     <div class="page_head">
-        <div class="flex_one" v-html="userHeadImg"></div>
-        <div class="flex_two"></div>
+        <div class="flex_one head_img" v-html="userHeadImg"></div>
+        <div class="flex_two"><div v-on:click="showFreNotes"><span class="note_title">书友笔记</span><em class="icons down" v-bind:class="{ up:isShow }"></em></div></div>
         <div class="flex_one"></div>
     </div>
+  </div>
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
     <ul>
@@ -31,49 +33,56 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
+      isShow:false,
     }
   },
   computed: {
     userHeadImg: function () {
-      var headImgurl = 'E:/my project/A项目任务/GitHub/yedu/WeChat-service-number/src/assets/head.png';
-      return '<img src= '+ headImgurl +'/>';
+      var headImgurl = '//file.40017.cn/huochepiao/pc/stage/demo/1/head.png';
+      return '<img src= '+ headImgurl +' />';
     }
+  },
+  methods:{
+      showFreNotes:function(){
+          this.isShow = !this.isShow;
+      }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
+.icons{
+    background:url('../assets/yedu.png?v=1') no-repeat;
 }
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
+.top_page{
+    height:713px;
+    width:100%;
+    z-index:1;
+    background:url('../assets/back.png') no-repeat;
+    background-size: 100% 713px;
 }
 .page_head{
-  height:124px;
-  width:100%;
-  display:flex;
+    height:124px;
+    width:100%;
+    display:flex;
+    line-height:124px;
 }
+.page_head .note_title{
+    font-family:"PingFangHK-Medium";
+    font-size:30px;
+    color:#fff;
+    letter-spacing:2.87px;
+}
+.page_head .head_img{
+    padding-left:35px;
+    padding-top:30px;
+}
+
 .flex_one{
-  flex:1;
-  background:#ccc;
+   flex:1;
 }
 .flex_two{
-  flex:2;
-}
-.user_head_img{
-   background: url("E:/my project/A项目任务/GitHub/yedu/WeChat-service-number/src/assets/head.png") no-repeat;
+   flex:3;
 }
 </style>
