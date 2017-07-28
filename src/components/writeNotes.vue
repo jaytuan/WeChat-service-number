@@ -23,6 +23,7 @@ export default {
 .wirteNotes {
 	position: relative;
 	background-color: #F2F2F2;
+	height: 100%;
 }
 .header {
 	height:88px;
@@ -80,7 +81,6 @@ export default {
 	outline: 0;
 	box-shadow: 0 5px 5px #cecbcb;
 	font-size: 34px;
-	padding-left: 26px;
 
 }
 .notesTitle::-webkit-input-placeholder {
