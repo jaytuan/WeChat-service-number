@@ -29,6 +29,7 @@ export default {
 	height:88px;
 	width:100%;
 	position: relative;
+	background-color: #fff;
 	border-bottom: 1px solid #C8C7CC;
 }
 .close {
