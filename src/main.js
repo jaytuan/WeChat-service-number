@@ -5,6 +5,15 @@ import App from './App'
 import router from './router'
 
 Vue.config.productionTip = false
+var draw = {
+  drawcanvas:function(){
+  alert(11111);
+      var drawing = document.getElementById('drawing');
+      if(drawing.getContext){
+        var context = drawing.getContext('2d');
+      }
+  }
+}
 
 /* eslint-disable no-new */
 new Vue({
@@ -13,3 +22,4 @@ new Vue({
   template: '<App/>',
   components: { App }
 })
+//确定浏览器支持canvas

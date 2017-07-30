@@ -7,11 +7,22 @@
               </div>
               <div class="flex_two"><div v-on:click="showFreNotes"><span class="note_title">书友笔记</span><em class="icons down" v-bind:class="{ up:isShow }"></em></div></div>
               <div class="flex_one">
-                  <router-link to="/setTime"><em class="set_icon""></em></router-link>
+                  <router-link to="/setTime"><em class="icons set_icon""></em></router-link>
               </div>
           </div>
           <div class="start_read">
+                <div v-if="showStartBtn" class="start">
+                    <div class="start_btn" v-on:click="startRead">
+                      <p>{{ isDone ? '完成' : '开始'}}</p>
+                      <p class="today">{{ nowDate }}</p>
 
+                    </div>
+                    
+                </div>
+                <div v-if="!showStartBtn" class="reading"> 
+                          <canvas id="drawing"></canvas>
+                </div>
+                <em class="icons second_hand"></em>
           </div>
       </div>
       <div class="content_center">
@@ -22,7 +33,7 @@
       </div>
       <div class="punch_list">
           <div class="top_menu">
-              <div class="left_title"><em class="note_list"></em><span>打卡统计</span></div>
+              <div class="left_title"><em class="icons note_list"></em><span>打卡统计</span></div>
               <div class="hold_date">已坚持<span class="digital">{{ holdDates }}</span>天</div>
           </div>
           <div class="date_list">
@@ -60,7 +71,7 @@ export default {
   computed: {
     userHeadImg: function () {
       var headImgurl = '//file.40017.cn/huochepiao/pc/stage/demo/1/head.png';
-      return '<img width="64px" src= '+ headImgurl +' />';
+      return '<img width="60px" src= '+ headImgurl +' />';
     },
     dates:function(){
         var a = [];
@@ -74,12 +85,54 @@ export default {
            a.push({"num":date,"hasSign":b[i]});
        }
        return a;
+    },
+    nowDate:function(){
+        var today = new Date();
+        return today.getFullYear()+'.'+(today.getMonth()+1)+'.'+today.getDate();
     }
   },
   methods:{
       showFreNotes:function(){
           this.isShow = !this.isShow;
       },
+      startRead:function(){
+          if(this.isDone){
+            return false;
+          }
+         this.showStartBtn = false;
+         var startReadTime = new Date().getTime();
+         window.localStorage._startTime = startReadTime;
+         setTimeout(draw.drawcanvas(),200);
+      },
+  },
+  created(){
+      var startReadTime = parseInt(window.localStorage._startTime,10);
+      if(!startReadTime){
+          //缓存没有找到上次阅读时间，则显示开始按钮，未完成阅读
+          this.showStartBtn = true;
+          this.isDone = false;
+      }else{
+          var now = new Date().getTime();
+          var nowDate = new Date().getFullYear()+''+(new Date().getMonth()+1)+''+new Date().getDate();
+          var lastReadDate = new Date(startReadTime).getFullYear()+''+(new Date(startReadTime).getMonth()+1)+''+new Date(startReadTime).getDate();
+          if( nowDate == lastReadDate && now-startReadTime >= 1800*1000){
+            //同一天且30分钟已过，开始按钮显示 ’完成‘
+            this.showStartBtn = true;
+            this.isDone = true;
+          }else if(nowDate != lastReadDate){
+            //第二天，或者以后很多天，可以点击开始
+            this.showStartBtn = true;
+            this.isDone = false;
+          }else{
+            //三十分钟内显示动画
+            alert(1);
+            this.showStartBtn = false;
+            this.isDone = false;
+            window.onload = function(){
+              setTimeout(draw.drawcanvas(),200);
+            }
+          }
+      }
   },
   beforeCreate(){
       //this.$http.get('a.txt').then(function(res){
@@ -91,6 +144,28 @@ export default {
        this.readTimes = 308;
        this.holdDates = 12; 
        this.readWithYou = 7089;
+  }
+}
+ var draw = {
+  drawcanvas:function(){
+      var drawing = document.getElementById('drawing');
+      alert(drawing);
+      if(drawing.getContext){
+        alert(111);
+        var context = drawing.getContext('2d');
+        //开始路径
+        context.beginPath();
+
+        //绘制外圆
+        context.arc(100,100,99,0,2*Math.PI,false);
+
+        //绘制内园
+        context.moveTo(194,100);
+        context.arc(100,100,94,0,2*Math.PI,false);
+
+        //
+        context.stroke();
+      }
   }
 }
 </script>
@@ -107,7 +182,7 @@ ul{
   list-style:none;
 }
 .icons{
-    background:url('../assets/yedu.png?v=1') no-repeat;
+    background:url('../assets/yedu.png?v=2') no-repeat;
 }
 .hello{
   height:100%;
@@ -123,9 +198,44 @@ ul{
 .top_page .start_read{
     width:480px;
     height:480px;
-    background:#ccc;
     z-index:20;
     margin:0 auto;
+}
+.top_page .start_read .start{
+    background:url('../assets/yuanhuan.png?v=1') no-repeat;
+    width:340px;
+    height:340px;
+    padding:72px;
+    background-size:480px;
+}
+.top_page .start_read .reading{
+    background:url('../assets/yuanhuan.png?v=1') no-repeat;
+    width:480px;
+    height:480px;
+    background-size:480px;
+  
+}
+.top_page .start_read .start .start_btn{
+    background:url('../assets/start.png?v=1') no-repeat;
+    height:240px;
+    width:340px;
+    background-size:340px;
+    padding-top:100px;
+    color:#fff;
+    font-size:100px;
+    font-family: STHeitiSC-Medium;
+    letter-spacing:1.84px;
+    border-radius:170px;
+}
+.top_page .start_read .today{
+    font-size:20px;
+    margin-top:34px;
+}
+.top_page .start_read .second_hand{
+   display:inline-block;
+   width:41px;
+   height:41px;
+   background-position:-256px -3px;
 }
 .page_head{
     height:124px;
@@ -140,21 +250,19 @@ ul{
     letter-spacing:2.87px;
 }
 .page_head .down{
-  width:36px;
+  width:28px;
   height:20px;
   display:inline-block;
-  background-position:-114px -11px;
+  background-position:-53px 3px;
 }
 .page_head .up{
-  background-position:-114px -38px;
+  background-position:-53px -22px;
 }
 .page_head .set_icon{
-  width:64px;
+  width:60px;
   height:64px;
   display:inline-block;
-  background:url('../assets/setting.png') no-repeat;
   background-position:3px 3px;
-  background-size:54px;
   position:absolute;
   top:35px;
   right:35px;
@@ -232,12 +340,11 @@ ul{
     margin-right:40px;
 }
 .punch_list .left_title .note_list{
-    width:46px;
-    height:43px;
+    width:30px;
+    height:40px;
     display:inline-block;
-    background:url('../assets/notelist.png?v=1') no-repeat;
-    background-size:30px;
     vertical-align:middle;
+    background-position:-90px 3px;
 }
 .punch_list .date_list .week_day{
     display:flex;
@@ -273,7 +380,7 @@ ul{
     font-size:32px;
     margin:18px auto;
     font-family: STHeitiSC-Light;
-    color: #3F3F3F;
+    color: #999;
     letter-spacing: 0.5px;
     line-height: 33px;
 }
