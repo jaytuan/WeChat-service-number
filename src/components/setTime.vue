@@ -9,7 +9,8 @@
     </div>
     <div class="readWarn">阅读提醒(<label for=""></label>)</div>
     <div class="chooseHour">
-    	
+    	<div class="zhishi"></div>
+    	<div class="timeline" @touchstart="start" @touchend="end" @click="touch" v-bind:style="{ transform: translateX}">1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24</div>
     </div>
     <div class="chooseDuration"></div>
   </div>
@@ -20,9 +21,37 @@ export default {
   name: 'hello',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      startX: 0 ,
+      endX: 0 ,
+      lastDis:0,
+      disX:0,
+      translateX:"",
     }
+  },
+  methods:{
+  	touch:function(){
+  		console.log(this.$refs);
+  	},
+  	start:function(e){
+  		this.startX = e.targetTouches[0].clientX;
+  	},
+  	end:function(e){
+  		this.endX = e.changedTouches[0].clientX;
+		this.disX = this.endX - this.startX + this.lastDis;
+		if(this.disX > 560){
+			this.disX = 560;
+		}
+		if(this.disX < -560){
+			this.disX = -560;
+		}
+		this.lastDis = this.disX;
+		console.log(this.disX);
+		this.translateX = "translateX("+this.disX+"px)"
+		return this.translateX ;
+  	}
   }
+  	
 }
 </script>
 <style scoped>
@@ -88,5 +117,20 @@ export default {
 	margin: 0 auto;
 	position: relative;
 	overflow-x: hidden;
+}
+.zhishi {
+	position: absolute;
+	top:0;
+	height:20px;
+	width: 2px;
+	left: 358px;
+	background-color: #333;
+}
+.timeline{
+	text-align: left;
+	width: 960px;
+	height: 60px;
+	padding-top: 30px;
+	font-size: 30px;
 }
 </style>
