@@ -1,6 +1,9 @@
 <template>
   <div class="personalCenter">
     <div class="personalHeader">
+      <div class="back">&lt;</div>
+      <div class="imgHead"></div>
+      <div class="userNicks">abcdsafsdngfakijrh</div>
     </div>
     <div class="readSome">
       <div class="duration">阅读时长<label>{{duration}}</label>小时</div>
@@ -61,9 +64,31 @@ export default {
   background-color: #F2F2F2;
 }
 .personalHeader {
-	height: 289px;
+	height: 245px;
 	width: 100%;
-	background:  linear-gradient(to right,#8CC2FD,#5190D5)
+	background:  linear-gradient(to right,#8CC2FD,#5190D5);
+  position: relative;
+  padding-top: 44px;
+}
+.back{
+  height: 42px;
+  width: 25px;
+  position: absolute;
+  top:23px;
+  left:30px;
+}
+.imgHead {
+  background: url("../assets/head.png");
+  height: 118px;
+  width: 118px;
+  margin-left: 316px;
+  background-size: cover;
+}
+.userNicks {
+  font-size: 34px;
+  color: #fff;
+  margin: 0 auto;
+  margin-top: 16px;
 }
 .readSome {
   position: absolute;

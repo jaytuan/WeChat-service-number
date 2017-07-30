@@ -5,6 +5,7 @@ import writeNotes from '@/components/writeNotes' // 写笔记
 import publishSuc from '@/components/publishSuc' // 笔记发表成功
 import personalCenter from '@/components/personalCenter' // 笔记发表成功
 import rankingList from '@/components/rankingList' // 排行榜
+import setTime from '@/components/setTime'
 
 
 Vue.use(Router)
@@ -35,6 +36,11 @@ export default new Router({
       path: '/rankingList',
       name: 'rankingList',
       component: rankingList
+    },
+     {
+      path: '/setTime',
+      name: 'setTime',
+      component: setTime
     },
   ]
 })

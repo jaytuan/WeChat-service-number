@@ -76,7 +76,8 @@ export default {
 	height: 118px;
 	width: 118px;
 	left: 316px;
-	background: url("/assets/logo.png")
+	background: url("../assets/publishok.png") no-repeat;
+	background-size: cover;
 }
 .wordsucc {
 	font-size: 36px;
