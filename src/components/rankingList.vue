@@ -15,19 +15,19 @@
         </div>
       </div>
       <div class="mid">
-        <div class="crown"></div>
-        <div class="crownImg"></div>
+        <div class="crownMid"></div>
+        <div class="crownImgMid"></div>
         <div class="userInfo">
-          <div class="userName">极限挑</div>
-          <div class="readTime">200小时</div>
+          <div class="userNameMid">极限挑</div>
+          <div class="readTimeMid">200小时</div>
         </div>
       </div>
       <div class="right">
-        <div class="crown"></div>
-        <div class="crownImg"></div>
+        <div class="crownRight"></div>
+        <div class="crownImgRight"></div>
         <div class="userInfo">
-          <div class="userName">极限挑</div>
-          <div class="readTime">200小时</div>
+          <div class="userNameRight">极限挑</div>
+          <div class="readTimeRight">200小时</div>
         </div>
       </div>
     </div>
@@ -111,13 +111,45 @@ export default {
   float: left;
   position: relative;
 }
+.mid {
+  height: 314px;
+  width: 222px;
+  float: left;
+  position: relative;
+}
+.right {
+  height: 314px;
+  width: 264px;
+  float: left;
+  position: relative;
+}
 .crown {
-  width: 83px;
+  width: 88px;
   height: 70px;
   position: absolute;
   top:25px;
   left: 126.5px;
   background: url("../assets/ranking2.png");
+  background-size: cover;
+  z-index: 25;
+}
+.crownRight {
+  width: 88px;
+  height: 70px;
+  position: absolute;
+  top:25px;
+  right: 121.5px;
+  background: url("../assets/ranking3.png");
+  background-size: cover;
+  z-index: 25;
+}
+.crownMid {
+  width: 105px;
+  height: 82px;
+  position: absolute;
+  top:8px;
+  left: 61.3px;
+  background: url("../assets/ranking1.png");
   background-size: cover;
   z-index: 25;
 }
@@ -127,6 +159,26 @@ export default {
   position: absolute;
   top:82.5px;
   left: 116px;
+  background: url("../assets/head.png");
+  background-size: cover;
+  z-index: 20;
+}
+.crownImgMid {
+  width: 126.6px;
+  height: 127.8px;
+  position: absolute;
+  top: 77.9px;
+  left: 48px;
+  background: url("../assets/head.png");
+  background-size: cover;
+  z-index: 20;
+}
+.crownImgRight {
+  width: 99.7px;
+  height: 100.7px;
+  position: absolute;
+  top:82.5px;
+  right: 116.5px;
   background: url("../assets/head.png");
   background-size: cover;
   z-index: 20;
@@ -149,6 +201,31 @@ export default {
   height: 48px;
   line-height: 48px;
 }
+.userNameRight {
+  text-align: center;
+  width: 198px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 34px;
+  padding-right: 68px;
+  font-family: PingFangSC-Regular;
+  color: #FFFFFF;
+  height: 48px;
+  line-height: 48px;
+}
+.userNameMid {
+  text-align: center;
+  width: 222px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 34px;
+  font-family: PingFangSC-Regular;
+  color: #FFFFFF;
+  height: 48px;
+  line-height: 48px;
+}
 .readTime {
 font-family: PingFangSC-Regular;
 font-size: 26px;
@@ -157,6 +234,23 @@ height: 37px;
 text-align: center;
 width: 204px;
 padding-left: 68px;
+}
+.readTimeRight {
+  font-family: PingFangSC-Regular;
+  font-size: 26px;
+  color: #FFFFFF;
+  height: 37px;
+  text-align: center;
+  width: 204px;
+  padding-right: 68px;
+}
+.readTimeMid {
+  font-family: PingFangSC-Regular;
+  font-size: 26px;
+  color: #FFFFFF;
+  height: 37px;
+  text-align: center;
+  width: 222px;
 }
 .mid {
   height: 314px;

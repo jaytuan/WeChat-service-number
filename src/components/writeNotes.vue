@@ -68,6 +68,7 @@ export default {
 	height:88px;
 	line-height:88px;
 	font-size: 34px;
+
 }
 .notesTitle {
 	position: absolute;
@@ -82,7 +83,7 @@ export default {
 	outline: 0;
 	box-shadow: 0 5px 5px #cecbcb;
 	font-size: 34px;
-
+	padding-left:30px;
 }
 .notesTitle::-webkit-input-placeholder {
 	font-family: STHeitiSC-Light;
