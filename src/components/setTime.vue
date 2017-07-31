@@ -1,16 +1,18 @@
 <template>
   <div class="setTime">
     <div class="header">
-	    <div class="back"></div>
+	    <router-link to="/" class="back"></router-link>
 	    <div class="title">设置时间</div>
     </div>
     <div class="openClose">
     	<label for="" class="open">开启提醒</label>
     </div>
-    <div class="readWarn">阅读提醒(<label for=""></label>)</div>
+    <div class="readWarn">阅读提醒(<label for="">{{time}}</label>)</div>
     <div class="chooseHour">
     	<div class="zhishi"></div>
-    	<div class="timeline" @touchstart="start" @touchend="end" @click="touch" v-bind:style="{ transform: translateX}">1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24</div>
+    	<div class="timeline" @touchstart="start" @touchend="end" v-bind:style="{transform: translateX}">
+
+    	</div>
     </div>
     <div class="chooseDuration"></div>
   </div>
@@ -22,31 +24,73 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
-      startX: 0 ,
-      endX: 0 ,
-      lastDis:0,
-      disX:0,
-      translateX:"",
+      startX: 0 , // 开始滑动的位置
+      endX: 0 , // 结束滑动的位置
+      lastDis:0,  // 上次滑动的距离
+      disX:0, // 当前滑动的距离
+      translateX:"", // css
+      time:13, // 时间
+      isBoundry:false,
+      lastTime:0,
     }
   },
   methods:{
-  	touch:function(){
-  		console.log(this.$refs);
+  	touch:function(e){
+  		console.log(e);
   	},
   	start:function(e){
-  		this.startX = e.targetTouches[0].clientX;
+  		this.startX = e.targetTouches[0].clientX; // 开始的x位置
   	},
+  	/*move:function(e){
+  		if(this.moveX == 0){
+  			return ;
+  		}
+  		e.preventDefault();
+  		this.disX = e.changedTouches[0].clientX - this.startX + this.lastDis;
+  		if(this.disX >= 0) {
+
+  		}
+
+  	},*/
   	end:function(e){
+  		console.log(e);
   		this.endX = e.changedTouches[0].clientX;
 		this.disX = this.endX - this.startX + this.lastDis;
-		if(this.disX > 560){
-			this.disX = 560;
+		/*if(this.disX > 390){
+			this.disX = 390;
 		}
-		if(this.disX < -560){
-			this.disX = -560;
+		if(this.disX < -390){
+			this.disX = -390;
+		}*/
+		if(this.disX >= 350 && !this.isBoundry){
+			// 指针指到1的时候，往右偏了350px
+			this.isBoundry = true;
+			this.disX = 350;
+			this.lastDis = this.disX;
 		}
-		this.lastDis = this.disX;
+		else if(this.disX >= 350 && this.isBoundry) {
+			this.disX = 350;
+			this.lastDis = this.lastDis;
+		}
+		else if(this.disX <= -350 && !this.isBoundry){
+			this.isBoundry = true;
+			this.disX = -350;
+			this.lastDis = this.disX;
+		}
+		else if(this.disX <= -350 && this.isBoundry){
+			this.disX = -350;
+			this.lastDis = this.lastDis;
+		}
+		else {
+			this.isBoundry = false;
+			this.lastDis = this.disX;
+		}
+		this.time = 13 - Math.round(this.disX/20);
 		console.log(this.disX);
+		/*if(this.moveX < 0){
+			console.log("到边上了");
+		}*/
+		/*this.time = Math.round(this.disX/20) + this.time;*/
 		this.translateX = "translateX("+this.disX+"px)"
 		return this.translateX ;
   	}

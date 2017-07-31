@@ -1,7 +1,7 @@
 <template>
   <div class="personalCenter">
     <div class="personalHeader">
-      <div class="back">&lt;</div>
+      <router-link to="/" class="back"></router-link>
       <div class="imgHead"></div>
       <div class="userNicks">abcdsafsdngfakijrh</div>
     </div>
@@ -71,11 +71,14 @@ export default {
   padding-top: 44px;
 }
 .back{
-  height: 42px;
-  width: 25px;
+  height: 30px;
+  width: 30px;
   position: absolute;
-  top:23px;
-  left:30px;
+  top:44px;
+  left:51px;
+  border-left: 5px solid #fff;
+  border-top: 5px solid #fff;
+  transform:rotate(315deg);
 }
 .imgHead {
   background: url("../assets/head.png");
