@@ -20,8 +20,12 @@
                 <div v-show="!showStartBtn"  class="reading"> 
                         <canvas id="drawing"></canvas>
                         <span class="second_pointer">
-                            <em class="icons second_hand"></em>
+                            <em class="icons second_hand" v-bind:style="{left:leftValue+'px',top:topValue+'px'}"></em>
                         </span>
+                        <div class="dif_time">
+                              <span class="dif_minutes">{{ leftTime }}'</span>
+                              <span class="today">{{ nowDate }}</span>
+                        </div>
                 </div>
           </div>
       </div>
@@ -67,6 +71,9 @@ export default {
     return {
       isShow:false,
       showStartBtn:true,
+      topValue:-220,
+      leftValue:0,
+      leftTime:30,
     }
   },
   computed: {
@@ -103,8 +110,35 @@ export default {
          this.showStartBtn = false;
          var startReadTime = new Date().getTime();
          window.localStorage._startTime = startReadTime;
-         setTimeout(draw.drawcanvas(),200);
+         this.drawcanvas();
       },
+      drawcanvas : function(){
+            var t = 1;
+            var that = this;
+            var drawpicture = setInterval(function(){
+               if(t>60){
+                 t=1;
+                }
+                that.leftValue = 220 * Math.sin(Math.PI/30 * t);
+                that.topValue = -220 * Math.cos(Math.PI/30 * t);
+                t++;
+            },1000);
+            var drawing = document.getElementById('drawing');
+           if(drawing.getContext){
+             var context = drawing.getContext('2d');
+              //开始路径
+             context.beginPath();
+
+              //绘制外圆
+              context.arc(100,100,99,0,2*Math.PI,false);
+
+              //绘制内园
+              context.moveTo(194,100);
+              context.arc(100,100,94,0,2*Math.PI,false);
+
+              context.stroke();
+            }
+       },
   },
   created(){
       var startReadTime = parseInt(window.localStorage._startTime,10);
@@ -128,9 +162,7 @@ export default {
             //三十分钟内显示动画
             this.showStartBtn = false;
             this.isDone = false;
-            window.onload = function(){
-              setTimeout(draw.drawcanvas(),200);
-            }
+            //this.drawcanvas();
           }
       }
   },
@@ -144,27 +176,7 @@ export default {
        this.readTimes = 308;
        this.holdDates = 12; 
        this.readWithYou = 7089;
-  }
-}
- var draw = {
-  drawcanvas:function(){
-      var drawing = document.getElementById('drawing');
-      if(drawing.getContext){
-        var context = drawing.getContext('2d');
-        //开始路径
-        context.beginPath();
-
-        //绘制外圆
-        context.arc(100,100,99,0,2*Math.PI,false);
-
-        //绘制内园
-        context.moveTo(194,100);
-        context.arc(100,100,94,0,2*Math.PI,false);
-
-        //
-        context.stroke();
-      }
-  }
+  },
 }
 </script>
 
@@ -218,8 +230,13 @@ ul{
     left:220px;
     top:220px;
 }
-.top_page .start_read .reading .second_hand{
+.top_page .start_read .reading .dif_time{
     position:absolute;
+    left:220px;
+    top:220px;
+}
+.top_page .start_read .reading .dif_minutes{
+  
 }
 .top_page .start_read .start .start_btn{
     background:url('../assets/start.png?v=1') no-repeat;
@@ -237,11 +254,12 @@ ul{
     font-size:20px;
     margin-top:34px;
 }
-.top_page .start_read .second_hand{
+.top_page .start_read .reading .second_hand{
    display:inline-block;
    width:41px;
    height:41px;
-   background-position:-256px -3px;
+   background-position:-257px -1px;
+   position:absolute;
 }
 .page_head{
     height:124px;
