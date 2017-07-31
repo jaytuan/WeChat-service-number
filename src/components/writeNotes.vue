@@ -1,8 +1,9 @@
 <template>
   <div class="wirteNotes">
     <div class="header">
-	    <div class="close"></div>
+	    <router-link to='/' class="close"></router-link>
 	    <div class="title">写笔记</div>
+	    <div class="publish" @click="publish">发表</div>
     </div>
     <input type="text" class="notesTitle" placeholder="标题">
     <textarea name="" id="content" cols="30" rows="10" placeholder="输入内容"></textarea>
@@ -16,6 +17,12 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
+  },
+  methods:{
+  	publish:function() {
+  		alert("publish");
+  		this.$router.push({path:'/personalCenter'});
+  	}
   }
 }
 </script>
@@ -70,6 +77,16 @@ export default {
 	font-size: 34px;
 
 }
+.publish {
+	position: absolute;
+	right: 30px;
+	height: 88px;
+	line-height: 88px;
+	top:0;
+	font-family: STHeitiSC-Light;
+	font-size: 34px;
+	color: #999;
+}
 .notesTitle {
 	position: absolute;
 	top:112px;
@@ -83,12 +100,12 @@ export default {
 	outline: 0;
 	box-shadow: 0 5px 5px #cecbcb;
 	font-size: 34px;
-	padding-left:30px;
 }
 .notesTitle::-webkit-input-placeholder {
 	font-family: STHeitiSC-Light;
 	font-size: 34px;
 	color: #B3B3B3;
+	padding-left:30px;
 	/* padding:26px 620px 28px 30px; */
 }
 #content {
