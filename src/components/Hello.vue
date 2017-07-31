@@ -11,18 +11,18 @@
               </div>
           </div>
           <div class="start_read">
-                <div v-if="showStartBtn" class="start">
+                <div v-show="showStartBtn" class="start">
                     <div class="start_btn" v-on:click="startRead">
                       <p>{{ isDone ? '完成' : '开始'}}</p>
                       <p class="today">{{ nowDate }}</p>
-
                     </div>
-                    
                 </div>
-                <div v-if="!showStartBtn" class="reading"> 
-                          <canvas id="drawing"></canvas>
+                <div v-show="!showStartBtn"  class="reading"> 
+                        <canvas id="drawing"></canvas>
+                        <span class="second_pointer">
+                            <em class="icons second_hand"></em>
+                        </span>
                 </div>
-                <em class="icons second_hand"></em>
           </div>
       </div>
       <div class="content_center">
@@ -47,7 +47,7 @@
                   <li class="flex_one">日</li>
               </ul>
               <ul class="months_day">
-                  <li  v-for="it in dates" class="flex_one"><span v-bind:class="{ has_sign : it.hasSign }">{{ it.num }}</span></li>
+                  <li  v-for="it in dates" class="flex_one"><span class="line_height" v-bind:class="{ has_sign : it.hasSign }">{{ it.num }}</span></li>
               </ul>
           </div>
       </div>
@@ -66,6 +66,7 @@ export default {
   data () {
     return {
       isShow:false,
+      showStartBtn:true,
     }
   },
   computed: {
@@ -125,7 +126,6 @@ export default {
             this.isDone = false;
           }else{
             //三十分钟内显示动画
-            alert(1);
             this.showStartBtn = false;
             this.isDone = false;
             window.onload = function(){
@@ -149,9 +149,7 @@ export default {
  var draw = {
   drawcanvas:function(){
       var drawing = document.getElementById('drawing');
-      alert(drawing);
       if(drawing.getContext){
-        alert(111);
         var context = drawing.getContext('2d');
         //开始路径
         context.beginPath();
@@ -213,7 +211,15 @@ ul{
     width:480px;
     height:480px;
     background-size:480px;
-  
+    position:relative;
+}
+.top_page .start_read .reading .second_pointer{
+    position:absolute;
+    left:220px;
+    top:220px;
+}
+.top_page .start_read .reading .second_hand{
+    position:absolute;
 }
 .top_page .start_read .start .start_btn{
     background:url('../assets/start.png?v=1') no-repeat;
@@ -328,7 +334,7 @@ ul{
     font-family: STHeitiSC-Light;
     font-size: 30px;
     color: #5E626C;
-    margin-bottom:30px;
+    margin-bottom:25px;
 }
 .punch_list .left_title{
     display:inline-block;
@@ -359,6 +365,9 @@ ul{
     font-size: 38px;
     color: #666;
     letter-spacing: 0.1px;
+}
+.punch_list .date_list .line_height{
+    line-height:58px;
 }
 .punch_list .date_list .flex_one{
     float:left;
