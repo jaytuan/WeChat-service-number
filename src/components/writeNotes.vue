@@ -95,23 +95,25 @@ export default {
 	background: #FFFFFF;
 	border-radius: 10px;
 	height: 88px;
-	width: 718px;
+	width: 688px;
 	border:0;
 	outline: 0;
 	box-shadow: 0 5px 5px #cecbcb;
+	-webkit-box-shadow: 0 5px 5px #cecbcb;
 	font-size: 34px;
+    -webkit-appearance: none;
+    padding-left: 30px;
+    -webkit-tap-highlight-color:rgba(255,255,255,0);
 }
 .notesTitle::-webkit-input-placeholder {
 	font-family: STHeitiSC-Light;
 	font-size: 34px;
 	color: #B3B3B3;
-	padding-left:30px;
-	/* padding:26px 620px 28px 30px; */
 }
 #content {
 	font-family: STHeitiSC-Light;
-	width: 690px;
-	height: 421px;
+	width: 660px;
+	height:370px;
 	margin-top: 89px;
 	border:0;
 	outline: 0;
@@ -120,9 +122,11 @@ export default {
 	font-size: 30px;
 	padding-top: 51px;
 	padding-left: 30px;
+	-webkit-tap-highlight-color:rgba(255,255,255,0);
 }
 textarea::-webkit-input-placeholder {
 	font-size: 30px;
 	color: #B3B3B3;
+	
 }
 </style>

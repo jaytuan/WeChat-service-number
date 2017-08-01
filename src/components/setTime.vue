@@ -6,12 +6,59 @@
     </div>
     <div class="openClose">
     	<label for="" class="open">开启提醒</label>
+    	<div class="setCheck"><input type="checkbox" class="al-toggle-button"></div>
     </div>
     <div class="readWarn">阅读提醒(<label for="">{{time}}</label>)</div>
     <div class="chooseHour">
-    	<div class="zhishi"></div>
+    	<div class="tri"></div>
     	<div class="timeline" @touchstart="start" @touchend="end" v-bind:style="{transform: translateX}">
-
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
     	</div>
     </div>
     <div class="chooseDuration"></div>
@@ -56,12 +103,7 @@ export default {
   		console.log(e);
   		this.endX = e.changedTouches[0].clientX;
 		this.disX = this.endX - this.startX + this.lastDis;
-		/*if(this.disX > 390){
-			this.disX = 390;
-		}
-		if(this.disX < -390){
-			this.disX = -390;
-		}*/
+		// 第一次触碰左边际
 		if(this.disX >= 350 && !this.isBoundry){
 			// 指针指到1的时候，往右偏了350px
 			this.isBoundry = true;
@@ -72,13 +114,13 @@ export default {
 			this.disX = 350;
 			this.lastDis = this.lastDis;
 		}
-		else if(this.disX <= -350 && !this.isBoundry){
+		else if(this.disX <= -1550 && !this.isBoundry){
 			this.isBoundry = true;
-			this.disX = -350;
+			this.disX = -1550;
 			this.lastDis = this.disX;
 		}
-		else if(this.disX <= -350 && this.isBoundry){
-			this.disX = -350;
+		else if(this.disX <= -1550 && this.isBoundry){
+			this.disX = -1550;
 			this.lastDis = this.lastDis;
 		}
 		else {
@@ -86,11 +128,6 @@ export default {
 			this.lastDis = this.disX;
 		}
 		this.time = 13 - Math.round(this.disX/20);
-		console.log(this.disX);
-		/*if(this.moveX < 0){
-			console.log("到边上了");
-		}*/
-		/*this.time = Math.round(this.disX/20) + this.time;*/
 		this.translateX = "translateX("+this.disX+"px)"
 		return this.translateX ;
   	}
@@ -132,16 +169,67 @@ export default {
 	margin-top: 30px;
 	background-color: #fff;
 	position: relative;
+	overflow: hidden;
 }
 .open {
 	font-family: STHeitiSC-Light;
 	font-size: 34px;
 	color: #000000;
-	display: block;
 	height: 88px;
 	line-height: 88px;
 	text-align: left;
 	padding-left: 30px;
+	float: left;
+}
+.setCheck {
+	position: absolute;
+	right: 60px;
+	top:28px;
+}
+.al-toggle-button{
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    width: 52px;
+    height: 32px;
+    background: #dfdfdf;
+    border-radius: 16px;
+    border: 1px solid #dfdfdf;
+    outline: 0;
+    box-sizing: border-box;
+}
+.al-toggle-button:checked{
+    border-color: #04be02;
+    background-color: #04be02;
+}
+.al-toggle-button:before, .al-toggle-button:after{
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 30px;
+    border-radius: 15px;
+    transition: transform 0.3s;
+    transition: -webkit-transform 0.3s;
+    transition: transform 0.3s, -webkit-transform 0.3s;
+    -webkit-transition: -webkit-transform 0.3s;
+}
+.al-toggle-button:before{
+    width: 50px;
+    background-color: #fdfdfd;
+}
+.al-toggle-button:after{
+    width: 30px;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.al-toggle-button:checked:before{
+    transform: scale(0);
+    -webkit-transform: scale(0);
+}
+.al-toggle-button:checked:after{
+    transform: translateX(20px);
+    -webkit-transform: translateX(20px);
 }
 .readWarn {
 	font-family: STHeitiSC-Light;
@@ -162,19 +250,119 @@ export default {
 	position: relative;
 	overflow-x: hidden;
 }
-.zhishi {
+.tri {
 	position: absolute;
 	top:0;
-	height:20px;
-	width: 2px;
-	left: 358px;
-	background-color: #333;
+	left: 334px;
+	width: 0;
+	height: 0;
+	border-left: 23px solid transparent;
+	border-right: 23px solid transparent;
+	border-top: 25px solid #74A9E3;
 }
 .timeline{
+	overflow: hidden;
 	text-align: left;
-	width: 960px;
+	width: 2000px;
 	height: 60px;
-	padding-top: 30px;
-	font-size: 30px;
+	padding-top: 23.6px;
+	padding-left: 20px;
+	padding-bottom: 26.4px;
+}
+.hour{
+	position: relative;
+	float: left;
+	width: 38px;
+	border-left: 1px solid #979797;
+	height: 37.3px;
+}
+.hourHalf {
+	float: left;
+	width: 38px;
+	border-left: 1px solid #979797;
+	height: 26.5px;
+	margin-top: 5.4px; 
+}
+.hour:after {
+	position: absolute;
+	bottom: -43px;
+	left: -7px;
+	font-size: 28px;
+	color: #000;
+}
+.hour:nth-of-type(1):after {
+	content: '0';
+}
+.hour:nth-of-type(3):after {
+	content: '1';
+}
+.hour:nth-of-type(5):after {
+	content: '2';
+}
+.hour:nth-of-type(7):after {
+	content: '3';
+}
+.hour:nth-of-type(9):after {
+	content: '4';
+}
+.hour:nth-of-type(11):after {
+	content: '5';
+}
+.hour:nth-of-type(13):after {
+	content: '6';
+}
+.hour:nth-of-type(15):after {
+	content: '7';
+}
+.hour:nth-of-type(17):after {
+	content: '8';
+}
+.hour:nth-of-type(19):after {
+	content: '9';
+}
+.hour:nth-of-type(21):after {
+	content: '10';
+}
+.hour:nth-of-type(23):after {
+	content: '11';
+}
+.hour:nth-of-type(25):after {
+	content: '12';
+}
+.hour:nth-of-type(27):after {
+	content: '13';
+}
+.hour:nth-of-type(29):after {
+	content: '14';
+}
+.hour:nth-of-type(31):after {
+	content: '15';
+}
+.hour:nth-of-type(33):after {
+	content: '16';
+}
+.hour:nth-of-type(35):after {
+	content: '17';
+}
+.hour:nth-of-type(37):after {
+	content: '18';
+}
+.hour:nth-of-type(39):after {
+	content: '19';
+}
+.hour:nth-of-type(41):after {
+	content: '20';
+}
+.hour:nth-of-type(43):after {
+	content: '21';
+}
+.hour:nth-of-type(23):after {
+	content: '22';
+}
+.hour:nth-of-type(45):after {
+	content: '23';
+}
+.hour:nth-of-type(47):after {
+	content: '24';
 }
 </style>
