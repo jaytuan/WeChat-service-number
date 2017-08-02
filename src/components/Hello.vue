@@ -112,32 +112,40 @@ export default {
          window.localStorage._startTime = startReadTime;
          this.drawcanvas();
       },
-      drawcanvas : function(){
+      drawcanvas : function(secondsPosition){
             var t = 1;
+            if(!!secondsPosition){
+                t = secondsPosition;
+            }
             var that = this;
             var drawpicture = setInterval(function(){
                if(t>60){
                  t=1;
+                 that.leftTime--;
+                 if(that.leftTime<=0){
+                    that.isDone = true;
+                    clearInterval(drawpicture);
+                 }
                 }
                 that.leftValue = 220 * Math.sin(Math.PI/30 * t);
                 that.topValue = -220 * Math.cos(Math.PI/30 * t);
                 t++;
             },1000);
-            var drawing = document.getElementById('drawing');
-           if(drawing.getContext){
-             var context = drawing.getContext('2d');
+           // var drawing = document.getElementById('drawing');
+           //if(drawing.getContext){
+             //var context = drawing.getContext('2d');
               //开始路径
-             context.beginPath();
+            // context.beginPath();
 
               //绘制外圆
-              context.arc(100,100,99,0,2*Math.PI,false);
+            //  context.arc(100,100,99,0,2*Math.PI,false);
 
               //绘制内园
-              context.moveTo(194,100);
-              context.arc(100,100,94,0,2*Math.PI,false);
+             // context.moveTo(194,100);
+             // context.arc(100,100,94,0,2*Math.PI,false);
 
-              context.stroke();
-            }
+            //  context.stroke();
+           // }
        },
   },
   created(){
@@ -162,7 +170,10 @@ export default {
             //三十分钟内显示动画
             this.showStartBtn = false;
             this.isDone = false;
-            //this.drawcanvas();
+            var leftMinutes = Math.ceil((now - startReadTime)/1000/60);
+            this.leftTime = 30-leftMinutes;
+            var leftSeconds = 60-(now - startReadTime)/1000%60;
+            this.drawcanvas(leftSeconds);
           }
       }
   },
@@ -232,11 +243,13 @@ ul{
 }
 .top_page .start_read .reading .dif_time{
     position:absolute;
-    left:220px;
-    top:220px;
+    left:175px;
+    top:150px;
 }
 .top_page .start_read .reading .dif_minutes{
-  
+    font-size:140px;
+    color:#85bbf7;
+    font-weight:bold;
 }
 .top_page .start_read .start .start_btn{
     background:url('../assets/start.png?v=1') no-repeat;
@@ -252,7 +265,10 @@ ul{
 }
 .top_page .start_read .today{
     font-size:20px;
-    margin-top:34px;
+    display:block;
+    padding-right:35px;
+    color:#aaa;
+    margin-top:26px;
 }
 .top_page .start_read .reading .second_hand{
    display:inline-block;
