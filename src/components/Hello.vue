@@ -18,7 +18,6 @@
                     </div>
                 </div>
                 <div v-show="!showStartBtn"  class="reading"> 
-                        <canvas id="drawing"></canvas>
                         <span class="second_pointer">
                             <em class="icons second_hand" v-bind:style="{left:leftValue+'px',top:topValue+'px'}"></em>
                         </span>
@@ -26,6 +25,14 @@
                               <span class="dif_minutes">{{ leftTime }}'</span>
                               <span class="today">{{ nowDate }}</span>
                         </div>
+                </div>
+                <div class="progress_left">
+                    <div class="circle_left">
+                    </div>
+                </div>
+                <div class="progress_right">
+                    <div class="circle_right">
+                    </div>
                 </div>
           </div>
       </div>
@@ -96,7 +103,11 @@ export default {
     },
     nowDate:function(){
         var today = new Date();
-        return today.getFullYear()+'.'+(today.getMonth()+1)+'.'+today.getDate();
+        var nowMonth = today.getMonth()+1;
+        nowMonth = nowMonth < 10 ? '0' + nowMonth : nowMonth; 
+        var nowDate = today.getDate();
+        nowDate = nowDate < 10 ? '0' + nowDate : nowDate;
+        return today.getFullYear() + '.'+ nowMonth + '.' + nowDate;
     }
   },
   methods:{
@@ -118,6 +129,8 @@ export default {
                 t = secondsPosition;
             }
             var that = this;
+            var leftCircle = document.getElementsByClassName('circle_left');
+            var rightCircle = document.getElementsByClassName('circle_right');
             var drawpicture = setInterval(function(){
                if(t>60){
                  t=1;
@@ -129,23 +142,12 @@ export default {
                 }
                 that.leftValue = 220 * Math.sin(Math.PI/30 * t);
                 that.topValue = -220 * Math.cos(Math.PI/30 * t);
+                if(t<30){
+                  rightCircle.setAttribute('style','transform:rotate('+(-45+6*t)+'deg)');
+                }
                 t++;
             },1000);
-           // var drawing = document.getElementById('drawing');
-           //if(drawing.getContext){
-             //var context = drawing.getContext('2d');
-              //开始路径
-            // context.beginPath();
-
-              //绘制外圆
-            //  context.arc(100,100,99,0,2*Math.PI,false);
-
-              //绘制内园
-             // context.moveTo(194,100);
-             // context.arc(100,100,94,0,2*Math.PI,false);
-
-            //  context.stroke();
-           // }
+           
        },
   },
   created(){
@@ -235,6 +237,44 @@ ul{
     height:480px;
     background-size:480px;
     position:relative;
+}
+.top_page .start_read .progress_left{
+    position:relative;
+    width:242px;
+    height:480px;
+    z-index:10;
+    top:-482px;
+    pointer-events:none;
+}
+.progress_left .circle_left{
+    border:solid 40px rgba(0,0,0,0);
+    border-left-color:#4090e9;
+    border-top-color:#4090e9;
+    width:400px;
+    height:400px;
+    border-radius:50%;
+    transform:rotate(135deg);
+}
+.top_page .start_read .progress_right{
+    position:relative;
+    width:242px;
+    height:480px;
+    left:239px;
+    top:-962px;
+    overflow:hidden;
+    z-index:10;
+    pointer-events:none;
+}
+.progress_right .circle_right{
+    border:solid 40px rgba(0,0,0,0);
+    border-left-color:#4090e9;
+    border-top-color:#4090e9;
+    width:400px;
+    height:400px;
+    position:relative;
+    left:-240px;
+    border-radius:50%;
+    transform:rotate(-45deg);
 }
 .top_page .start_read .reading .second_pointer{
     position:absolute;
