@@ -27,11 +27,11 @@
                         </div>
                 </div>
                 <div class="progress_left">
-                    <div class="circle_left">
+                    <div class="circle_left" v-bind:style="{transform:'rotate('+ leftRot +'deg)'}">
                     </div>
                 </div>
                 <div class="progress_right">
-                    <div class="circle_right">
+                    <div class="circle_right" v-bind:style="{transform:'rotate('+ rightRot +'deg)'}">
                     </div>
                 </div>
           </div>
@@ -70,7 +70,6 @@
       </div>
   </div>
 </template>
-
 <script>
 export default {
   name: 'hello',
@@ -81,6 +80,8 @@ export default {
       topValue:-220,
       leftValue:0,
       leftTime:30,
+      leftRot:135,
+      rightRot:-45,
     }
   },
   computed: {
@@ -129,22 +130,24 @@ export default {
                 t = secondsPosition;
             }
             var that = this;
-            var leftCircle = document.getElementsByClassName('circle_left');
-            var rightCircle = document.getElementsByClassName('circle_right');
             var drawpicture = setInterval(function(){
                if(t>60){
                  t=1;
+                 that.leftRot = 135;
                  that.leftTime--;
                  if(that.leftTime<=0){
                     that.isDone = true;
                     clearInterval(drawpicture);
                  }
                 }
+                if(t<30){
+                    that.rightRot = -40+6*t;
+                }else{
+                    that.rightRot = 135;
+                    that.leftRot = 140 + 6*(t-30);
+                }
                 that.leftValue = 220 * Math.sin(Math.PI/30 * t);
                 that.topValue = -220 * Math.cos(Math.PI/30 * t);
-                if(t<30){
-                  rightCircle.setAttribute('style','transform:rotate('+(-45+6*t)+'deg)');
-                }
                 t++;
             },1000);
            
@@ -242,6 +245,7 @@ ul{
     position:relative;
     width:242px;
     height:480px;
+    overflow:hidden;
     z-index:10;
     top:-482px;
     pointer-events:none;
@@ -259,8 +263,8 @@ ul{
     position:relative;
     width:242px;
     height:480px;
-    left:239px;
     top:-962px;
+    left:240px;
     overflow:hidden;
     z-index:10;
     pointer-events:none;
