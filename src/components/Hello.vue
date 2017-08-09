@@ -122,6 +122,21 @@ export default {
          this.showStartBtn = false;
          var startReadTime = new Date().getTime();
          window.localStorage._startTime = startReadTime;
+         //开始阅读接口
+          this.$http.get('//59.110.143.18:8080/read/toBegin',{
+              "busiInfo": {
+                  "userId": "123"
+              },
+              "pubInfo": {
+                  "channelId": "wx",
+                  "opId": "wxuipowur3875dks"
+              }
+          }).then(function(res){  
+            console.log(res);  
+          },function(res){  
+            console.warn(res);  
+          })  
+         
          this.drawcanvas();
       },
       drawcanvas : function(secondsPosition){
@@ -131,7 +146,7 @@ export default {
             }
             var that = this;
             var drawpicture = setInterval(function(){
-               if(t>60){
+               if(t>=60){
                  t=1;
                  that.leftRot = 135;
                  that.leftTime--;
@@ -152,6 +167,16 @@ export default {
             },1000);
            
        },
+       getImg: function(){
+                    var that = this;      
+                    that.$http({           //调用接口
+                        method:'GET',
+                        url:this.getImgUrl  //this指data
+                    }).then(function(response){  //接口返回数据
+                        this.imgList=response.data;                        
+                    },function(error){
+                    })
+        }
   },
   created(){
       var startReadTime = parseInt(window.localStorage._startTime,10);
@@ -243,7 +268,7 @@ ul{
 }
 .top_page .start_read .progress_left{
     position:relative;
-    width:242px;
+    width:240px;
     height:480px;
     overflow:hidden;
     z-index:10;
@@ -261,7 +286,7 @@ ul{
 }
 .top_page .start_read .progress_right{
     position:relative;
-    width:242px;
+    width:240px;
     height:480px;
     top:-962px;
     left:240px;
