@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import VueResource from 'vue-resource'
 import Hello from '@/components/Hello'
 import writeNotes from '@/components/writeNotes' // 写笔记
 import publishSuc from '@/components/publishSuc' // 笔记发表成功
@@ -9,6 +10,7 @@ import setTime from '@/components/setTime'
 
 
 Vue.use(Router)
+Vue.use(VueResource)
 
 export default new Router({
   routes: [

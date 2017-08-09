@@ -21,6 +21,39 @@ export default {
   methods:{
   	publish:function() {
   		alert("publish");
+  		//var that = this;
+  		/*that.$http({
+  			method:"post",
+  			url:"http://59.110.143.18:8080/read/saveNote",
+  			data:{
+  				"busiInfo": {
+			        "userId": "123",
+			        "noteTitle": "XXXX",
+			        "noteContent": "XXXX"
+			    },
+			    "pubInfo": {
+			        "channelId": "wx",
+			        "opId": "wxuipowur3875dks"
+			    }
+  			}
+  		}).then(function(res){
+  			console.log(res);
+  		})*/
+  		this.$http.post('http://59.110.143.18:8080/read/saveNote',{
+  			"busiInfo": {
+		        "userId": "123",
+		        "noteTitle": "XXXX",
+		        "noteContent": "XXXX"
+		    },
+		    "pubInfo": {
+		        "channelId": "wx",
+		        "opId": "wxuipowur3875dks"
+		    }
+  		}).then(function(res){
+  			if( res && res.statusCode == 200) {
+  				alert(res.msg);
+  			}
+  		})
   		this.$router.push({path:'/personalCenter'});
   	}
   }

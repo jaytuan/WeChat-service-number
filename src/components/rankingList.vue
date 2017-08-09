@@ -2,7 +2,7 @@
   <div class="rankingList">
   	<div class="header">
     <div class="headerTitle">
-      <div class="back">&lt;</div>
+      <div class="back"></div>
       <div class="title">排行榜</div>
     </div>
     <div class="rankingMid">
@@ -88,9 +88,13 @@ export default {
 }
 .back {
   position: absolute;
-  top:23px;
-  height: 42px;
-  width: 25px;
+  top:30px;
+  left: 30px;
+  height: 26px;
+  width: 26px;
+  border-top:5px solid #fff;
+  border-left: 5px solid #fff;
+  transform: rotate(-45deg);
 }
 .title {
   margin:0 auto;
