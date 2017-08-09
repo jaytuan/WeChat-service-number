@@ -2,7 +2,7 @@
   <div class="rankingList">
   	<div class="header">
     <div class="headerTitle">
-      <div class="back"></div>
+      <router-link to="/" class="back"></router-link to="/">
       <div class="title">排行榜</div>
     </div>
     <div class="rankingMid">

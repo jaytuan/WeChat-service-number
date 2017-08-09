@@ -76,7 +76,7 @@ export default {
       lastDis:0,  // 上次滑动的距离
       disX:0, // 当前滑动的距离
       translateX:"", // css
-      time:13, // 时间
+      time:4, // 时间
       isBoundry:false,
       lastTime:0,
     }
@@ -104,30 +104,30 @@ export default {
   		this.endX = e.changedTouches[0].clientX;
 		this.disX = this.endX - this.startX + this.lastDis;
 		// 第一次触碰左边际
-		if(this.disX >= 350 && !this.isBoundry){
+		if(this.disX >= 310 && !this.isBoundry){
 			// 指针指到1的时候，往右偏了350px
 			this.isBoundry = true;
-			this.disX = 350;
+			this.disX = 310;
 			this.lastDis = this.disX;
 		}
-		else if(this.disX >= 350 && this.isBoundry) {
-			this.disX = 350;
+		else if(this.disX >= 310 && this.isBoundry) {
+			this.disX = 310;
 			this.lastDis = this.lastDis;
 		}
-		else if(this.disX <= -1550 && !this.isBoundry){
+		else if(this.disX <= -1483 && !this.isBoundry){
 			this.isBoundry = true;
-			this.disX = -1550;
+			this.disX = -1483;
 			this.lastDis = this.disX;
 		}
-		else if(this.disX <= -1550 && this.isBoundry){
-			this.disX = -1550;
+		else if(this.disX <= -1483 && this.isBoundry){
+			this.disX = -1483;
 			this.lastDis = this.lastDis;
 		}
 		else {
 			this.isBoundry = false;
 			this.lastDis = this.disX;
 		}
-		this.time = 13 - Math.round(this.disX/20);
+		this.time = 4 - Math.ceil(this.disX/78);
 		this.translateX = "translateX("+this.disX+"px)"
 		return this.translateX ;
   	}
@@ -266,7 +266,7 @@ export default {
 	width: 2000px;
 	height: 60px;
 	padding-top: 23.6px;
-	padding-left: 20px;
+	padding-left: 45px;
 	padding-bottom: 26.4px;
 }
 .hour{

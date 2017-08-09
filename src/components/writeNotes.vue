@@ -20,7 +20,6 @@ export default {
   },
   methods:{
   	publish:function() {
-  		alert("publish");
   		//var that = this;
   		/*that.$http({
   			method:"post",
