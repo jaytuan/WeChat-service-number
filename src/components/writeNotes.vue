@@ -38,17 +38,17 @@ export default {
   		}).then(function(res){
   			console.log(res);
   		})*/
-  		this.$http.post('http://59.110.143.18:8080/read/saveNote',{
+  		this.$http.post('http://59.110.143.18:8080/read/saveNote.bz',{
   			"busiInfo": {
 		        "userId": "123",
-		        "noteTitle": "XXXX",
-		        "noteContent": "XXXX"
+		        "noteTitle": "测试",
+		        "noteContent": "测试"
 		    },
 		    "pubInfo": {
 		        "channelId": "wx",
 		        "opId": "wxuipowur3875dks"
 		    }
-  		}).then(function(res){
+  		},{emulateJSON: true}).then(function(res){
   			if( res && res.statusCode == 200) {
   				alert(res.msg);
   			}

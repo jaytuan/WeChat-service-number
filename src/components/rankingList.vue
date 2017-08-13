@@ -7,7 +7,7 @@
     </div>
     <div class="rankingMid">
       <div class="left">
-        <div class="crown"></div>
+        <div class="crown"><img :src="lists[0].imgurl" alt=""></div>
         <div class="crownImg"></div>
         <div class="userInfo">
           <div class="userName">极限挑</div>
@@ -67,6 +67,14 @@ export default {
   	  }
       ]
     }
+  },
+  created:function(){
+    console.log()
+    this.$http.post("http://59.110.143.18:8080/read/getTopTen.bz",{},{emulateJSON:true}).then(function(res){
+      if(res && res.body && res.body.code) {
+        this.lists = res.body.data;
+      }
+    })
   }
 }
 </script>
@@ -127,7 +135,8 @@ export default {
   float: left;
   position: relative;
 }
-.crown {
+.crown img {
+  display: block;
   width: 88px;
   height: 70px;
   position: absolute;
