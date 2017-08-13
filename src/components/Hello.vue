@@ -123,7 +123,7 @@ export default {
          var startReadTime = new Date().getTime();
          window.localStorage._startTime = startReadTime;
          //开始阅读接口
-          this.$http.get('//59.110.143.18:8080/read/toBegin',{
+         var para = {
               "busiInfo": {
                   "userId": "123"
               },
@@ -131,7 +131,8 @@ export default {
                   "channelId": "wx",
                   "opId": "wxuipowur3875dks"
               }
-          }).then(function(res){  
+          };
+          this.$http.post('http://59.110.143.18:8080/read/toBegin.bz',{"inParam":para}).then(function(res){  
             console.log(res);  
           },function(res){  
             console.warn(res);  
