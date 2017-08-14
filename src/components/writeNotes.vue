@@ -5,8 +5,8 @@
 	    <div class="title">写笔记</div>
 	    <div class="publish" @click="publish">发表</div>
     </div>
-    <input type="text" class="notesTitle" placeholder="标题">
-    <textarea name="" id="content" cols="30" rows="10" placeholder="输入内容"></textarea>
+    <input type="text" class="notesTitle" placeholder="标题" v-model="notestitle">
+    <textarea name="" id="content" cols="30" rows="10" placeholder="输入内容" v-model="content"></textarea>
   </div>
 </template>
 
@@ -15,7 +15,9 @@ export default {
   name: 'hello',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      notestitle:"",
+      content:""
     }
   },
   methods:{
@@ -38,17 +40,17 @@ export default {
   		}).then(function(res){
   			console.log(res);
   		})*/
-  		this.$http.post('http://59.110.143.18:8080/read/saveNote.bz',{
+  		this.axios.post('http://59.110.143.18:8080/read/saveNote.bz',JSON.stringify({
   			"busiInfo": {
 		        "userId": "123",
-		        "noteTitle": "测试",
-		        "noteContent": "测试"
+		        "noteTitle": this.notestitle,
+		        "noteContent": this.content
 		    },
 		    "pubInfo": {
 		        "channelId": "wx",
 		        "opId": "wxuipowur3875dks"
 		    }
-  		},{emulateJSON: true}).then(function(res){
+  		})).then(function(res){
   			if( res && res.statusCode == 200) {
   				alert(res.msg);
   			}
