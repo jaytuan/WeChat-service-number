@@ -22,26 +22,8 @@ export default {
   },
   methods:{
   	publish:function() {
-  		//var that = this;
-  		/*that.$http({
-  			method:"post",
-  			url:"http://59.110.143.18:8080/read/saveNote",
-  			data:{
-  				"busiInfo": {
-			        "userId": "123",
-			        "noteTitle": "XXXX",
-			        "noteContent": "XXXX"
-			    },
-			    "pubInfo": {
-			        "channelId": "wx",
-			        "opId": "wxuipowur3875dks"
-			    }
-  			}
-  		}).then(function(res){
-  			console.log(res);
-  		})*/
-  		this.axios.post('http://59.110.143.18:8080/read/saveNote.bz',JSON.stringify({
-  			"busiInfo": {
+  		var data = {
+		    "busiInfo": {
 		        "userId": "123",
 		        "noteTitle": this.notestitle,
 		        "noteContent": this.content
@@ -50,11 +32,19 @@ export default {
 		        "channelId": "wx",
 		        "opId": "wxuipowur3875dks"
 		    }
-  		})).then(function(res){
-  			if( res && res.statusCode == 200) {
-  				alert(res.msg);
-  			}
-  		})
+		};
+  		var request = new XMLHttpRequest();
+	    request.open('POST', 'http://59.110.143.18:8080/read/saveNote.bz', true);
+
+	    request.onload = function() {
+	     // console.log(JSON.parse(this.responseText));
+	        if (this.status >= 200 && this.status < 400) {
+	          console.log(JSON.parse(this.responseText));
+	        }
+	    };
+
+	    request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    	request.send("inParam="+JSON.stringify(data));
   		this.$router.push({path:'/personalCenter'});
   	}
   }
