@@ -132,7 +132,7 @@ export default {
                   "opId": "wxuipowur3875dks"
               }
           };
-          this.$http.post('http://59.110.143.18:8080/read/toBegin.bz',{"inParam":para}).then(function(res){  
+          this.$http.post('http://59.110.143.18:8080/read/toBegin.bz',{"inParam":JSON.stringify(para)}).then(function(res){  
             console.log(res);  
           },function(res){  
             console.warn(res);  
