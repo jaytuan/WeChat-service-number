@@ -7,7 +7,7 @@
     </div>
     <div class="rankingMid">
       <div class="left">
-        <div class="crown"><img :src="lists[0].imgurl" alt=""></div>
+        <div class="crown"></div>
         <div class="crownImg"></div>
         <div class="userInfo">
           <div class="userName">极限挑</div>
@@ -69,12 +69,22 @@ export default {
     }
   },
   created:function(){
-    console.log()
-    this.$http.post("http://59.110.143.18:8080/read/getTopTen.bz",{},{emulateJSON:true}).then(function(res){
-      if(res && res.body && res.body.code) {
-        this.lists = res.body.data;
-      }
+    
+    /*this.axios.post("http://59.110.143.18:8080/read/getTopTen.bz").then(function(res){
+      console.log(res)
     })
+*/
+    var request = new XMLHttpRequest();
+    request.open('POST', 'http://59.110.143.18:8080/read/getTopTen.bz', true);
+
+    request.onload = function() {
+     // console.log(JSON.parse(this.responseText));
+        if (this.status >= 200 && this.status < 400) {
+          console.log(JSON.parse(this.responseText));
+        }
+    };
+
+    request.send();
   }
 }
 </script>
@@ -135,7 +145,7 @@ export default {
   float: left;
   position: relative;
 }
-.crown img {
+.crown {
   display: block;
   width: 88px;
   height: 70px;

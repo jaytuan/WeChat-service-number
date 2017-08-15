@@ -7,10 +7,13 @@ import publishSuc from '@/components/publishSuc' // 笔记发表成功
 import personalCenter from '@/components/personalCenter' // 笔记发表成功
 import rankingList from '@/components/rankingList' // 排行榜
 import setTime from '@/components/setTime'
+import axios from 'axios'
+import qs from 'qs'
 
 
 Vue.use(Router)
 Vue.use(VueResource)
+Vue.prototype.axios = axios;
 
 export default new Router({
   routes: [

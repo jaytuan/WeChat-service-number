@@ -55,6 +55,28 @@ export default {
         "time": "2017.10.11",
       }]
     }
+  },
+  created:function() {
+    var data = {
+        "busiInfo": {
+            "userId": "123"
+        },
+        "pubInfo": {
+            "channelId": "wx",
+            "opId": "wxuipowur3875dks"
+        }
+    };
+    var request = new XMLHttpRequest();
+    request.open('POST', 'http://59.110.143.18:8080/read/getTotalTimes.bz', true);
+
+    request.onload = function() {
+     // console.log(JSON.parse(this.responseText));
+        if (this.status >= 200 && this.status < 400) {
+          console.log(JSON.parse(this.responseText));
+        }
+    };
+    request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    request.send("inParam="+JSON.stringify(data));
   }
 }
 </script>
