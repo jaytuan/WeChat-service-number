@@ -82,6 +82,11 @@ export default {
       leftTime:30,
       leftRot:135,
       rightRot:-45,
+      readTimes:0,
+      rankingLevel:0,
+      holdDates:0,
+      readWithYou:0,
+      weekSignDate:[],
     }
   },
   computed: {
@@ -132,13 +137,18 @@ export default {
                   "opId": "wxuipowur3875dks"
               }
           };
-          this.$http.post('http://59.110.143.18:8080/read/toBegin.bz',{"inParam":JSON.stringify(para)}).then(function(res){  
-            console.log(res);  
-          },function(res){  
-            console.warn(res);  
-          })  
-         
-         this.drawcanvas();
+          var request = new XMLHttpRequest();
+          request.open('POST', 'http://59.110.143.18:8080/read/toBegin.bz', true);
+
+          request.onload = function() {
+              if (this.status >= 200 && this.status < 400) {
+                console.log(JSON.parse(this.responseText));
+              }
+          };
+
+          request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+          request.send("inParam="+JSON.stringify(para));
+          this.drawcanvas();
       },
       drawcanvas : function(secondsPosition){
             var t = 1;
@@ -177,7 +187,7 @@ export default {
                         this.imgList=response.data;                        
                     },function(error){
                     })
-        }
+        },
   },
   created(){
       var startReadTime = parseInt(window.localStorage._startTime,10);
@@ -209,15 +219,102 @@ export default {
       }
   },
   beforeCreate(){
-      //this.$http.get('a.txt').then(function(res){
-        //    alert(res.body);    
-       //},function(){
-        //console.log('请求失败处理');
-       //});
-       this.rankingLevel = 3;
-       this.readTimes = 308;
-       this.holdDates = 12; 
-       this.readWithYou = 7089;
+      var that = this;
+      function xhrQuest(params,url,callback){
+          var request = new XMLHttpRequest();
+          request.open('POST', url, true);
+          request.onload = callback;
+          request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+          request.send("inParam="+JSON.stringify(params));
+      }
+      function getReadTime(){
+          var para = {
+              "busiInfo": {
+                  "userId": "123"
+              },
+              "pubInfo": {
+                  "channelId": "wx",
+                  "opId": "wxuipowur3875dks"
+              }
+          }
+          var url = 'http://59.110.143.18:8080/read/getTotalTimes.bz';
+          xhrQuest(para,url,function(){
+              if (this.status >= 200 && this.status < 400) {
+                  var backData = JSON.parse(this.responseText);
+                  that.readTimes = backData.data.totalTimes;
+              }
+          });
+      }
+      function getRankingLevel(){
+          var para = {
+              "busiInfo": {
+                  "userId": "123"
+              },
+              "pubInfo": {
+                  "channelId": "wx",
+                  "opId": "wxuipowur3875dks"
+              }
+          }
+          var url = 'http://59.110.143.18:8080/read/getUserRank.bz';
+          xhrQuest(para,url,function(){
+              if (this.status >= 200 && this.status < 400) {
+                  var backData = JSON.parse(this.responseText);
+                  that.rankingLevel = backData.data.userRank;
+              }
+          });
+      }
+      function getHoldDates(){
+          var para = {
+              "busiInfo": {
+                  "userId": "123"
+              },
+              "pubInfo": {
+                  "channelId": "wx",
+                  "opId": "wxuipowur3875dks"
+              }
+          }
+          var url = 'http://59.110.143.18:8080/read/getSignNum.bz';
+          xhrQuest(para,url,function(){
+              if (this.status >= 200 && this.status < 400) {
+                  var backData = JSON.parse(this.responseText);
+                  that.holdDates = backData.data.signNum;
+              }
+          });
+      }
+      function getNowOnline(){
+          var para = {};
+          var url = 'http://59.110.143.18:8080/read/getOnlineUserNum.bz';
+          xhrQuest(para,url,function(){
+              if (this.status >= 200 && this.status < 400) {
+                  var backData = JSON.parse(this.responseText);
+                  that.readWithYou = backData.data.onlineUserNum;
+              }
+          });
+      }
+      function getWeekSignUp(){
+          var para = {
+              "busiInfo": {
+                  "userId": "123"
+              },
+              "pubInfo": {
+                  "channelId": "wx",
+                  "opId": "wxuipowur3875dks"
+              }
+          }
+          var url = 'http://59.110.143.18:8080/read/getWeekSignDate.bz';
+          xhrQuest(para,url,function(){
+              if (this.status >= 200 && this.status < 400) {
+                  var backData = JSON.parse(this.responseText);
+                  that.weekSignDate = backData.data.weekSignDate;
+                  console.log(backData.data.weekSignDate);
+              }
+          });
+      }
+      getReadTime();
+      getRankingLevel();
+      getHoldDates();
+      getNowOnline();
+      getWeekSignUp();
   },
 }
 </script>
