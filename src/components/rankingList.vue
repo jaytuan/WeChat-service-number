@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="rankingBot">
-      您的阅读时间为268小时，当前第一名
+      您的阅读时间为{{time}}小时，当前第{{race}}名
     </div>
   	</div>
   	<div class="ranking">
@@ -54,6 +54,8 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
+      time:"",
+      race:"",
       lists:[
       {"id":1,
       "name":"wudi",
@@ -69,22 +71,54 @@ export default {
     }
   },
   created:function(){
-    
-    /*this.axios.post("http://59.110.143.18:8080/read/getTopTen.bz").then(function(res){
+    var that = this;
+    this.http = function(data,url,fn) {
+      var request = new XMLHttpRequest();
+      request.open('POST', url, true);
+
+      request.onload = function() {
+       // console.log(JSON.parse(this.responseText));
+          if (this.status >= 200 && this.status < 400) {
+            var res = JSON.parse(this.responseText);
+            fn(res);
+          }
+      };
+      request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+      request.send("inParam="+JSON.stringify(data));
+    }
+    var url1 = 'http://59.110.143.18:8080/read/getTopTen.bz'; // 排行榜
+    var url2 = "http://59.110.143.18:8080/read/getTotalTimes.bz"; // 总阅读时长
+    var url3 = "http://59.110.143.18:8080/read/getUserRank.bz";// 获取排行榜排名
+
+    var data2 = {
+        "busiInfo": {
+            "userId": "123"
+        },
+        "pubInfo": {
+            "channelId": "wx",
+            "opId": "wxuipowur3875dks"
+        }
+    }
+    var data3 = {
+      "busiInfo": {
+          "userId": "123"
+      },
+      "pubInfo": {
+          "channelId": "wx",
+          "opId": "wxuipowur3875dks"
+      }
+    }
+    this.http("",url1,function(res) {
+      console.log(res);
+    })
+    this.http(data2,url2,function(res) {
+      that.time = res.data.totalTimes;
+      console.log(res);
+    })
+    this.http(data3,url3,function(res){
+      that.race = res.data.userRank;
       console.log(res)
     })
-*/
-    var request = new XMLHttpRequest();
-    request.open('POST', 'http://59.110.143.18:8080/read/getTopTen.bz', true);
-
-    request.onload = function() {
-     // console.log(JSON.parse(this.responseText));
-        if (this.status >= 200 && this.status < 400) {
-          console.log(JSON.parse(this.responseText));
-        }
-    };
-
-    request.send();
   }
 }
 </script>

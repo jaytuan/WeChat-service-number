@@ -27,8 +27,8 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
-      duration:"128",
-      days:"3",
+      duration:"",
+      days:"",
       list:[{
         "id":"0",
         "notetitle":"Hello",
@@ -57,6 +57,22 @@ export default {
     }
   },
   created:function() {
+    console.log(this);
+    var that = this;
+    this.http = function(data,url,fn) {
+      var request = new XMLHttpRequest();
+      request.open('POST', url, true);
+
+      request.onload = function() {
+       // console.log(JSON.parse(this.responseText));
+          if (this.status >= 200 && this.status < 400) {
+            var res = JSON.parse(this.responseText);
+            fn(res);
+          }
+      };
+      request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+      request.send("inParam="+JSON.stringify(data));
+    }
     var data = {
         "busiInfo": {
             "userId": "123"
@@ -66,17 +82,30 @@ export default {
             "opId": "wxuipowur3875dks"
         }
     };
-    var request = new XMLHttpRequest();
-    request.open('POST', 'http://59.110.143.18:8080/read/getTotalTimes.bz', true);
+    var data3 = {
+      opId:"wxuipowur3875dks",
+      channelId:"wx",
+      userId:"123",
+      qryType:1,
+      pageSize:10,
+      pageNum:1
+    }
+    var url1 = "http://59.110.143.18:8080/read/getTotalTimes.bz";
+    var url2 = "http://59.110.143.18:8080/read/getSignNum.bz";
+    var url3 = "http://59.110.143.18:8080/read/getReadNotes.bz"; // 查看阅读笔记
 
-    request.onload = function() {
-     // console.log(JSON.parse(this.responseText));
-        if (this.status >= 200 && this.status < 400) {
-          console.log(JSON.parse(this.responseText));
-        }
-    };
-    request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-    request.send("inParam="+JSON.stringify(data));
+    this.http(data,url1,function(res){
+      that.duration = res.data.totalTimes;
+
+    });
+    this.http(data,url2,function(res){
+      that.days = res.data.signNum;
+    });
+    this.http(data3,url3,function(res) {
+      console.log(res);
+    })
+    /// 'http://59.110.143.18:8080/read/getTotalTimes.bz'
+   
   }
 }
 </script>

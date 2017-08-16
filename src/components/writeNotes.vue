@@ -7,6 +7,12 @@
     </div>
     <input type="text" class="notesTitle" placeholder="标题" v-model="notestitle">
     <textarea name="" id="content" cols="30" rows="10" placeholder="输入内容" v-model="content"></textarea>
+    <div :class="[{pophide: status},{showbg: !status}]" @click="close">
+    	<div class="popshow">
+	     标题或内容不能为空！
+	  	</div>
+    </div>
+    
   </div>
 </template>
 
@@ -17,7 +23,8 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App',
       notestitle:"",
-      content:""
+      content:"",
+      status: true
     }
   },
   methods:{
@@ -33,19 +40,29 @@ export default {
 		        "opId": "wxuipowur3875dks"
 		    }
 		};
-  		var request = new XMLHttpRequest();
-	    request.open('POST', 'http://59.110.143.18:8080/read/saveNote.bz', true);
+		if(this.notestitle == "" || this.noteContent == ""){
+			this.status = false;
+		}
+		else {
+			var request = new XMLHttpRequest();
+		    request.open('POST', 'http://59.110.143.18:8080/read/saveNote.bz', true);
 
-	    request.onload = function() {
-	     // console.log(JSON.parse(this.responseText));
-	        if (this.status >= 200 && this.status < 400) {
-	          console.log(JSON.parse(this.responseText));
-	        }
-	    };
+		    request.onload = function() {
+		     // console.log(JSON.parse(this.responseText));
+		        if (this.status >= 200 && this.status < 400) {
+		          console.log(JSON.parse(this.responseText));
+		        }
+		    };
 
-	    request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-    	request.send("inParam="+JSON.stringify(data));
-  		this.$router.push({path:'/personalCenter'});
+		    request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	    	request.send("inParam="+JSON.stringify(data));
+	    	this.$router.push({path:'/personalCenter'});
+		}
+  		
+  		
+  	},
+  	close:function(){
+  		this.status = true;
   	}
   }
 }
@@ -152,5 +169,31 @@ textarea::-webkit-input-placeholder {
 	font-size: 30px;
 	color: #B3B3B3;
 	
+}
+.showbg {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: rgba(244,244,244,0.72);
+	z-index: 100;
+}
+.pophide {
+	display: none;
+}
+.popshow {
+	display: block;
+	position: absolute;
+	top: 400px;
+	left: 114px;
+	font-size: 40px;
+	background-color: #fff;
+	border:1px solid #807575;
+	border-radius: 8px;
+	padding: 60px;
+	height: 40px;
+	line-height: 40px;
+
 }
 </style>
