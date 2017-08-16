@@ -36,10 +36,14 @@
                 </div>
           </div>
       </div>
+      <div v-show='isShow' class="gray_back">
+          <div class="friend_note_ul">
+          </div>
+      </div>
       <div class="content_center">
           <div class="read_hours">阅读时长<span class="digital">{{ readTimes }}</span>小时</div>
           <div class="friend_list">
-              <router-link to="/rankingList">好友排行榜<span class="digital">{{ rankingLevel }}</span>名></router-link>
+              <router-link to="/rankingList">好友排行榜<span class="digital">{{ rankingLevel }}</span>名<i class="right_arrow"></i></router-link>
           </div>
       </div>
       <div class="punch_list">
@@ -76,6 +80,7 @@ export default {
   data () {
     return {
       isShow:false,
+      isDone:false,
       showStartBtn:true,
       topValue:-220,
       leftValue:0,
@@ -100,7 +105,7 @@ export default {
        var nowWeekDay = new Date().getDay();
        var diffday = nowWeekDay > 0 ? nowWeekDay-1 : 6;
        var nowTime = new Date().getTime();
-       var b=[true,false,true,false,false,true,false];
+       var b = this.weekSignDate;
        for(var i= 0;i<7;i++){
            var date = new Date(nowTime-(diffday-i)*3600*24*1000).getDate();
            a.push({"num":date,"hasSign":b[i]});
@@ -150,6 +155,9 @@ export default {
           request.send("inParam="+JSON.stringify(para));
           this.drawcanvas();
       },
+      readEnd : function(){
+
+      },
       drawcanvas : function(secondsPosition){
             var t = 1;
             if(!!secondsPosition){
@@ -163,7 +171,9 @@ export default {
                  that.leftTime--;
                  if(that.leftTime<=0){
                     that.isDone = true;
+                    that.showStartBtn = false;
                     clearInterval(drawpicture);
+                    that.readEnd();
                  }
                 }
                 if(t<30){
@@ -211,7 +221,7 @@ export default {
             //三十分钟内显示动画
             this.showStartBtn = false;
             this.isDone = false;
-            var leftMinutes = Math.ceil((now - startReadTime)/1000/60);
+            var leftMinutes = Math.floor((now - startReadTime)/1000/60);
             this.leftTime = 30-leftMinutes;
             var leftSeconds = 60-(now - startReadTime)/1000%60;
             this.drawcanvas(leftSeconds);
@@ -306,8 +316,30 @@ export default {
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);
                   that.weekSignDate = backData.data.weekSignDate;
-                  console.log(backData.data.weekSignDate);
               }
+          });
+      }
+      function getFriendNote(){
+          var para = {
+             "busiInfo":{
+                  "qryType":0,
+                  "userId":"wxuipowur3875dks",
+                  "pageSize":10,
+                  "pageNum":1
+              },
+              "pubInfo":{
+                  "channelId":"wx",
+                  "opId":"wxuipowur3875dks"
+              }
+          }
+          var url = 'http://59.110.143.18:8080/read/getReadNotes.bz';
+          xhrQuest(para,url,function(){
+              if (this.status >= 200 && this.status < 400) {
+                  var backData = JSON.parse(this.responseText);
+                  //that.weekSignDate = backData.data.weekSignDate;
+                  console.log(backData);
+              }
+
           });
       }
       getReadTime();
@@ -315,6 +347,7 @@ export default {
       getHoldDates();
       getNowOnline();
       getWeekSignUp();
+      getFriendNote();
   },
 }
 </script>
@@ -482,6 +515,7 @@ ul{
 }
 .flex_two{
    flex:3;
+   z-index:12;
 }
 .content_center{
     height:100px;
@@ -513,6 +547,14 @@ ul{
     font-size:32px;
     line-height:70px;
     vertical-align:middle;
+}
+.content_center .friend_list .right_arrow{
+  height: 20px;
+  width: 20px;
+  display:inline-block;
+  border-left: 2px solid #c7c7cc;
+  border-top: 2px solid #c7c7cc;
+  transform:rotate(135deg);
 }
 .digital{
     color:#67a1e0;
@@ -604,5 +646,22 @@ ul{
     font-size:45px;
     letter-spacing:10px;
     margin:0 auto 30px;
+}
+.gray_back{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    z-index:11;
+}
+.gray_back .friend_note_ul{
+    background:#F2F2F2;
+    position:relative;
+    top:8%;
+    left:0;
+    width:100%;
+    height:92%;
 }
 </style>
