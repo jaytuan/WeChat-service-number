@@ -10,24 +10,24 @@
         <div class="crown"></div>
         <div class="crownImg"></div>
         <div class="userInfo">
-          <div class="userName">极限挑</div>
-          <div class="readTime">200小时</div>
+          <div class="userName">{{lists[1].totalTimes}}</div>
+          <div class="readTime">{{lists[1].totalTimes}}小时</div>
         </div>
       </div>
       <div class="mid">
         <div class="crownMid"></div>
         <div class="crownImgMid"></div>
         <div class="userInfo">
-          <div class="userNameMid">极限挑</div>
-          <div class="readTimeMid">200小时</div>
+          <div class="userNameMid">{{lists[1].totalTimes}}</div>
+          <div class="readTimeMid">{{lists[1].totalTimes}}小时</div>
         </div>
       </div>
       <div class="right">
         <div class="crownRight"></div>
         <div class="crownImgRight"></div>
         <div class="userInfo">
-          <div class="userNameRight">极限挑</div>
-          <div class="readTimeRight">200小时</div>
+          <div class="userNameRight">{{lists[1].totalTimes}}</div>
+          <div class="readTimeRight">{{lists[1].totalTimes}}小时</div>
         </div>
       </div>
     </div>
@@ -37,11 +37,11 @@
   	</div>
   	<div class="ranking">
   		<ul class="rankingUl">
-  			<li v-for="item in lists">
+  			<li v-for="item in listThree">
   				<label class="rankingRace">{{item.id}}</label>
-          <img :src="item.imgurl" alt="" class="rangkingImg">
-          <label for="" class="rankingName">{{item.name}}</label>
-          <label for="" class="rankingTime">{{item.time}}</label>
+          <img :src="item.avator" alt="" class="rangkingImg">
+          <label for="" class="rankingName">{{item.nickName}}</label>
+          <label for="" class="rankingTime">{{item.totalTimes}}小时</label>
   			</li>
   		</ul>
   	</div>
@@ -56,18 +56,9 @@ export default {
       msg: 'Welcome to Your Vue.js App',
       time:"",
       race:"",
-      lists:[
-      {"id":1,
-      "name":"wudi",
-      "imgurl":"//file.40017.cn/huochepiao/pc/stage/demo/1/head.png",
-      "time":"200小时"
-  	  },
-  	  {"id":1,
-      "name":"极限挑战最好看",
-       "imgurl":"//file.40017.cn/huochepiao/pc/stage/demo/1/head.png",
-      "time":"200小时"
-  	  }
-      ]
+      lists:[],
+      listThree:[],
+      listThreeOther:[],
     }
   },
   created:function(){
@@ -109,7 +100,14 @@ export default {
       }
     }
     this.http("",url1,function(res) {
-      console.log(res);
+      if(res) {
+        that.lists = res.data;
+        console.log(that.lists)
+        that.listThree = res.data.slice(0,3);
+        that.listThreeOther = res.data.slice(3);
+      }
+      
+      console.log(that.listThree);
     })
     this.http(data2,url2,function(res) {
       that.time = res.data.totalTimes;
