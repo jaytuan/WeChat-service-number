@@ -3,12 +3,13 @@
     <div class="header">
 	    <router-link to="/" class="back"></router-link>
 	    <div class="title">设置时间</div>
+	    <div class="set" @click="set">设置</div>
     </div>
     <div class="openClose">
     	<label for="" class="open">开启提醒</label>
     	<div class="setCheck"><input type="checkbox" class="al-toggle-button" @click="toggle"></div>
     </div>
-    <div class="readWarn">阅读提醒(<label for="">{{time}}</label>)</div>
+    <div class="readWarn">阅读提醒(<label for="">{{time}}:{{sec}}</label>)</div>
     <div class="chooseHour">
     	<div class="tri"></div>
     	<div class="timeline" @touchstart="start" @touchend="end" v-bind:style="{transform: translateX}">
@@ -63,7 +64,7 @@
     		<div class="hour"></div>
     	</div>
     </div>
-    <div class="readWarn">阅读时长(<label for="">{{time}}</label>)</div>
+    <div class="readWarn">阅读时长(<label for="">{{duration}}</label>)</div>
     <div class="chooseHour">
     	<div class="tri"></div>
     	<div class="timeline" @touchstart="start2" @touchend="end2" v-bind:style="{transform: translateX2}">
@@ -99,9 +100,10 @@ export default {
       lastDis2:0,
       disX2:0,
       isBoundry2:false,
-      translateX2:"",
+      translateX2:"translateX(310px)",
       duration:30,
       isOpen:false,
+      sec:"00",
     }
   },
   methods:{
@@ -148,6 +150,14 @@ export default {
 			this.lastDis = this.disX;
 		}
 		this.time = 4 - Math.ceil(this.disX/78);
+		this.sec = this.disX % 78;
+		console.log(this.sec);
+		if(Math.abs(this.sec) > 39){
+			this.sec = "30";
+		}
+		else {
+			this.sec = "00";
+		}
 		this.translateX = "translateX("+this.disX+"px)"
 		return this.translateX ;
   	},
@@ -171,7 +181,7 @@ export default {
 		this.disX2 = this.endX2 - this.startX2 + this.lastDis2;
 		// 第一次触碰左边际
 		if(this.disX2 >= 310 && !this.isBoundry2){
-			// 指针指到1的时候，往右偏了350px
+			// 指针指到1的时候，往右偏了310px
 			this.isBoundry2 = true;
 			this.disX2 = 310;
 			this.lastDis2 = this.disX2;
@@ -180,26 +190,55 @@ export default {
 			this.disX2 = 310;
 			this.lastDis2 = this.lastDis2;
 		}
-		else if(this.disX2 <= -1561 && !this.isBoundry2){
+		else if(this.disX2 <= -138 && !this.isBoundry2){
 			this.isBoundry2 = true;
-			this.disX2 = -1561;
+			this.disX2 = -138;
 			this.lastDis2 = this.disX2;
 		}
-		else if(this.disX2 <= -1561 && this.isBoundry2){
-			this.disX2 = -1561;
+		else if(this.disX2 <= -138 && this.isBoundry2){
+			this.disX2 = -138;
 			this.lastDis2 = this.lastDis2;
 		}
 		else {
 			this.isBoundry2 = false;
 			this.lastDis2 = this.disX2;
 		}
-		this.duration = 4 - Math.ceil(this.disX2/78);
+		this.duration = Math.ceil((374-this.disX2)*210/448);
+		console.log(this.duration);
+		
 		this.translateX2 = "translateX("+this.disX2+"px)"
+		window.localStorage._startTime = this.duration;
 		return this.translateX2 ;
   	},
   	toggle:function(){
   		this.isOpen = !this.isOpen;
-  		console.log(this.isOpen);
+  	},
+  	set:function(){
+  		var url = "http://59.110.143.18:8080/read/setReadTime.bz";
+  		var data = {
+		    "busiInfo": {
+		        "userId": "123",
+		        "times": this.duration,
+		        "remindTime": this.time + ":"+this.sec,
+		        "isOpen": this.isOpen
+		    },
+		    "pubInfo": {
+		        "channelId": "wx",
+		        "opId": "wxuipowur3875dks"
+		    }
+		}
+  		var request = new XMLHttpRequest();
+	    request.open('POST', url, true);
+
+	    request.onload = function() {
+	       // console.log(JSON.parse(this.responseText));
+	        if (this.status >= 200 && this.status < 400) {
+	            var res = JSON.parse(this.responseText);
+	            console.log(res);
+	        }
+	    };
+	    request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	    request.send("inParam="+JSON.stringify(data));
   	}
   }
   	
@@ -212,7 +251,7 @@ export default {
 	height: 100%;
 }
 .header {
-	height:88px;
+	height:88px; 
 	width:100%;
 	position: relative;
 	background-color: #fff;
@@ -231,7 +270,15 @@ export default {
 	height:88px;
 	line-height:88px;
 	font-size: 34px;
-
+}
+.set {
+	position: absolute;
+	top: 19px;
+	right: 30px;
+	width: 100px;
+	height: 42px;
+	font-size: 34px;
+	color: rgba(280,280,280);
 }
 .openClose {
 	height: 88px;
