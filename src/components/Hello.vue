@@ -36,7 +36,7 @@
                 </div>
           </div>
       </div>
-      <div v-show='isShow' class="gray_back" ref="abc">
+      <div v-show='isShow' class="gray_back" id="noteList">
           <ul class="friend_note_ul">
               <li class="friend_note" v-for="item in friendNoteByPage">
                   <div class="note_head">
@@ -52,6 +52,8 @@
                       <span class="praise" v-bind:class="{ click_praise : item.isPraise }" v-on:click="clickPraise(item.noteId)"></span>
                   </div>
               </li>
+              <li class="loading" v-show="isLoading"></li>
+              <li class="no_more" v-show="nomore">没有更多内容啦</li>
           </ul>
       </div>
       <div class="content_center">
@@ -107,6 +109,9 @@ export default {
       readWithYou:0,
       weekSignDate:[],
       friendNoteByPage:[],
+      isLoading:false,
+      nomore:false,
+      pageIndex:2,
     }
   },
   computed: {
@@ -139,7 +144,6 @@ export default {
   methods:{
       showFreNotes:function(){
           this.isShow = !this.isShow;
-          this.getFriendNote(2);
       },
       clickPraise:function(id){
           for(var i = 0;i<this.friendNoteByPage.length;i++){
@@ -261,7 +265,7 @@ export default {
              "busiInfo":{
                   "qryType":0,
                   "userId":"wxuipowur3875dks",
-                  "pageSize":2,
+                  "pageSize":20,
                   "pageNum":index
               },
               "pubInfo":{
@@ -273,8 +277,14 @@ export default {
           this.xhrQuest(para,url,function(){
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);
-                  that.friendNoteByPage = that.friendNoteByPage.concat(backData.data);
-                  console.log(that.friendNoteByPage);
+                  console.log(backData.data.length)
+                  if(backData.data.length > 0 ){
+                    that.friendNoteByPage = that.friendNoteByPage.concat(backData.data);
+                    console.log(that.friendNoteByPage);
+                  }else{
+                    that.isLoading = false;
+                    that.nomore = true;
+                  }
               }
 
           });
@@ -287,9 +297,10 @@ export default {
           request.send("inParam="+JSON.stringify(params));
       },
       listenScroll:function(){
-          //alert(window.innerHeight);
-          //alert(document.body.scrollTop);
-          //alert(this.$refs.abc.getBoundingClientRect().height);
+          if(window.innerHeight + document.body.scrollTop + 10 > document.body.scrollHeight && !this.nomore){
+              this.isLoading = true; 
+              this.getFriendNote(this.pageIndex++);
+          }
       }
   },
   created(){
@@ -418,7 +429,7 @@ export default {
              "busiInfo":{
                   "qryType":0,
                   "userId":"wxuipowur3875dks",
-                  "pageSize":2,
+                  "pageSize":20,
                   "pageNum":index
               },
               "pubInfo":{
@@ -756,6 +767,15 @@ ul{
     left:0;
     width:100%;
     padding:58px 0;
+}
+.gray_back .friend_note_ul .loading{
+    background:url('../assets/loading.gif?v=1') no-repeat;
+    display:inline-block;
+    width:40px;
+    height:40px;
+}
+.gray_back .friend_note_ul .no_more{
+    font-size:30px;
 }
 .gray_back .friend_note_ul .friend_note{
     width:658px;
