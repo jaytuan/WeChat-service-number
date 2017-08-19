@@ -11,21 +11,12 @@
       <div class="days">已签到<label>{{days}}</label>天</div>
     </div>
      <div class="notesTitle">阅读笔记</div>
-     <!-- <div class="notesList" v-for="item in list">
-       <div class="contentHeader">
-         <div class="contentTitle">
-           {{item.notetitle}}
-         </div>
-       </div>
-     </div> -->
+     
      <div v-show="list.length > 0 " class="gray_back" ref="abc">
           <ul class="friend_note_ul">
               <li class="friend_note" v-for="item in list">
                   <div class="note_head">
-                     <!--  <span class="note_head_name">
-                       <img width="60px" src="//file.40017.cn/huochepiao/pc/stage/demo/1/head.png" class="note_head_img" ></img>
-                       <span class="friend_name">张依依</span>
-                     </span> -->
+                    
                       <span class="note_title"><span class="note_title_cont">{{item.noteTitle}}</span></span>
                       <span class="praise"></span>
                       <span class="praiseNum">{{item.praiseNumber}}</span>
@@ -36,9 +27,10 @@
                       
                   </div>
               </li>
+              <li class="loading" v-show="isLoading"></li>
           </ul>
       </div>
-      <div class="nolist" v-show="list.length == 0">暂无数据</div>
+      <div class="nolist" v-show="list.length == 0 || nomore == true">没有更多内容了</div>
   </div>
 </template>
 
@@ -51,6 +43,9 @@ export default {
       duration:"",
       days:"",
       list:[],
+      pageIndex:1,
+      isLoading:false,
+      nomore:false,
     }
   },
   created:function() {
@@ -83,8 +78,8 @@ export default {
       "busiInfo":{
             "qryType":1,
             "userId":"wxuipowur3875dks",
-            "pageSize":2,
-            "pageNum":2
+            "pageSize":20,
+            "pageNum":this.pageIndex,
         },
         "pubInfo":{
             "channelId":"wx",
@@ -106,9 +101,20 @@ export default {
       if(res.data.length != 0) {
         that.list = res.data;
       }
+      else {
+        that.nomore = true;
+      }
     })
     /// 'http://59.110.143.18:8080/read/getTotalTimes.bz'
    
+  },
+  methods:{
+     listenScroll:function(){
+          if(window.innerHeight + document.body.scrollTop + 10 > document.body.scrollHeight && !this.nomore){
+              this.isLoading = true; 
+             this.pageIndex++;
+          }
+      }
   }
 }
 </script>
