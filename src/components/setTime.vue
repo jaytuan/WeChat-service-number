@@ -153,7 +153,7 @@ export default {
 		this.sec = this.disX % 78;
 		console.log(this.sec);
 		if(Math.abs(this.sec) > 39){
-			this.sec = "30";
+			this.sec = "30"; 
 		}
 		else {
 			this.sec = "00";
@@ -385,6 +385,7 @@ export default {
 	padding-top: 23.6px;
 	padding-left: 45px;
 	padding-bottom: 26.4px;
+	transition: transform 4s;
 }
 .timeRuler {
 	position: relative;
