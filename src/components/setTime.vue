@@ -3,12 +3,13 @@
     <div class="header">
 	    <router-link to="/" class="back"></router-link>
 	    <div class="title">设置时间</div>
+	    <div class="set" @click="set">设置</div>
     </div>
     <div class="openClose">
     	<label for="" class="open">开启提醒</label>
-    	<div class="setCheck"><input type="checkbox" class="al-toggle-button"></div>
+    	<div class="setCheck"><input type="checkbox" class="al-toggle-button" @click="toggle"></div>
     </div>
-    <div class="readWarn">阅读提醒(<label for="">{{time}}</label>)</div>
+    <div class="readWarn">阅读提醒(<label for="">{{time}}:{{sec}}</label>)</div>
     <div class="chooseHour">
     	<div class="tri"></div>
     	<div class="timeline" @touchstart="start" @touchend="end" v-bind:style="{transform: translateX}">
@@ -59,9 +60,24 @@
     		<div class="hour"></div>
     		<div class="hourHalf"></div>
     		<div class="hour"></div>
+    		<div class="hourHalf"></div>
+    		<div class="hour"></div>
     	</div>
     </div>
-    <div class="chooseDuration"></div>
+    <div class="readWarn">阅读时长(<label for="">{{duration}}</label>)</div>
+    <div class="chooseHour">
+    	<div class="tri"></div>
+    	<div class="timeline" @touchstart="start2" @touchend="end2" v-bind:style="{transform: translateX2}">
+    		<div class="timeRuler"></div>
+    		<div class="timeRuler"></div>
+    		<div class="timeRuler"></div>
+    		<div class="timeRuler"></div>
+    		<div class="timeRuler"></div>
+    		<div class="timeRuler"></div>
+    		<div class="timeRuler"></div>
+    		<div class="timeRuler"></div>
+    	</div>
+    </div>
   </div>
 </template>
 
@@ -79,12 +95,19 @@ export default {
       time:4, // 时间
       isBoundry:false,
       lastTime:0,
+      startX2:0,
+      endX2:0,
+      lastDis2:0,
+      disX2:0,
+      isBoundry2:false,
+      translateX2:"translateX(310px)",
+      duration:30,
+      isOpen:false,
+      sec:"00",
     }
   },
   methods:{
-  	touch:function(e){
-  		console.log(e);
-  	},
+  	
   	start:function(e){
   		this.startX = e.targetTouches[0].clientX; // 开始的x位置
   	},
@@ -100,7 +123,6 @@ export default {
 
   	},*/
   	end:function(e){
-  		console.log(e);
   		this.endX = e.changedTouches[0].clientX;
 		this.disX = this.endX - this.startX + this.lastDis;
 		// 第一次触碰左边际
@@ -114,13 +136,13 @@ export default {
 			this.disX = 310;
 			this.lastDis = this.lastDis;
 		}
-		else if(this.disX <= -1483 && !this.isBoundry){
+		else if(this.disX <= -1561 && !this.isBoundry){
 			this.isBoundry = true;
-			this.disX = -1483;
+			this.disX = -1561;
 			this.lastDis = this.disX;
 		}
-		else if(this.disX <= -1483 && this.isBoundry){
-			this.disX = -1483;
+		else if(this.disX <= -1561 && this.isBoundry){
+			this.disX = -1561;
 			this.lastDis = this.lastDis;
 		}
 		else {
@@ -128,8 +150,95 @@ export default {
 			this.lastDis = this.disX;
 		}
 		this.time = 4 - Math.ceil(this.disX/78);
+		this.sec = this.disX % 78;
+		console.log(this.sec);
+		if(Math.abs(this.sec) > 39){
+			this.sec = "30"; 
+		}
+		else {
+			this.sec = "00";
+		}
 		this.translateX = "translateX("+this.disX+"px)"
 		return this.translateX ;
+  	},
+  	start2:function(e){
+  		this.startX2 = e.targetTouches[0].clientX; // 开始的x位置
+  	},
+  	/*move:function(e){
+  		if(this.moveX == 0){
+  			return ;
+  		}
+  		e.preventDefault();
+  		this.disX = e.changedTouches[0].clientX - this.startX + this.lastDis;
+  		if(this.disX >= 0) {
+
+  		}
+
+  	},*/
+  	end2:function(e){
+  		console.log(e);
+  		this.endX2 = e.changedTouches[0].clientX;
+		this.disX2 = this.endX2 - this.startX2 + this.lastDis2;
+		// 第一次触碰左边际
+		if(this.disX2 >= 310 && !this.isBoundry2){
+			// 指针指到1的时候，往右偏了310px
+			this.isBoundry2 = true;
+			this.disX2 = 310;
+			this.lastDis2 = this.disX2;
+		}
+		else if(this.disX2 >= 310 && this.isBoundry2) {
+			this.disX2 = 310;
+			this.lastDis2 = this.lastDis2;
+		}
+		else if(this.disX2 <= -138 && !this.isBoundry2){
+			this.isBoundry2 = true;
+			this.disX2 = -138;
+			this.lastDis2 = this.disX2;
+		}
+		else if(this.disX2 <= -138 && this.isBoundry2){
+			this.disX2 = -138;
+			this.lastDis2 = this.lastDis2;
+		}
+		else {
+			this.isBoundry2 = false;
+			this.lastDis2 = this.disX2;
+		}
+		this.duration = Math.ceil((374-this.disX2)*210/448);
+		console.log(this.duration);
+		
+		this.translateX2 = "translateX("+this.disX2+"px)"
+		window.localStorage._startTime = this.duration;
+		return this.translateX2 ;
+  	},
+  	toggle:function(){
+  		this.isOpen = !this.isOpen;
+  	},
+  	set:function(){
+  		var url = "http://59.110.143.18:8080/read/setReadTime.bz";
+  		var data = {
+		    "busiInfo": {
+		        "userId": "123",
+		        "times": this.duration,
+		        "remindTime": this.time + ":"+this.sec,
+		        "isOpen": this.isOpen
+		    },
+		    "pubInfo": {
+		        "channelId": "wx",
+		        "opId": "wxuipowur3875dks"
+		    }
+		}
+  		var request = new XMLHttpRequest();
+	    request.open('POST', url, true);
+
+	    request.onload = function() {
+	       // console.log(JSON.parse(this.responseText));
+	        if (this.status >= 200 && this.status < 400) {
+	            var res = JSON.parse(this.responseText);
+	            console.log(res);
+	        }
+	    };
+	    request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	    request.send("inParam="+JSON.stringify(data));
   	}
   }
   	
@@ -142,7 +251,7 @@ export default {
 	height: 100%;
 }
 .header {
-	height:88px;
+	height:88px; 
 	width:100%;
 	position: relative;
 	background-color: #fff;
@@ -161,7 +270,15 @@ export default {
 	height:88px;
 	line-height:88px;
 	font-size: 34px;
-
+}
+.set {
+	position: absolute;
+	top: 19px;
+	right: 30px;
+	width: 100px;
+	height: 42px;
+	font-size: 34px;
+	color: rgba(280,280,280);
 }
 .openClose {
 	height: 88px;
@@ -268,6 +385,15 @@ export default {
 	padding-top: 23.6px;
 	padding-left: 45px;
 	padding-bottom: 26.4px;
+	transition: transform 4s;
+}
+.timeRuler {
+	position: relative;
+	float: left;
+	width: 63px;
+	border-left: 1px solid #979797;
+	height: 26.7px;
+	margin-top: 7.6px;
 }
 .hour{
 	position: relative;
@@ -282,6 +408,13 @@ export default {
 	border-left: 1px solid #979797;
 	height: 26.5px;
 	margin-top: 5.4px; 
+}
+.timeRuler:after {
+	position: absolute;
+	bottom: -43px;
+	left: -16px;
+	font-size: 28px;
+	color: #000;
 }
 .hour:after {
 	position: absolute;
@@ -356,13 +489,43 @@ export default {
 .hour:nth-of-type(43):after {
 	content: '21';
 }
-.hour:nth-of-type(23):after {
+.hour:nth-of-type(45):after {
 	content: '22';
 }
-.hour:nth-of-type(45):after {
+.hour:nth-of-type(47):after {
 	content: '23';
 }
-.hour:nth-of-type(47):after {
+.hour:nth-of-type(49):after {
 	content: '24';
 }
+.timeRuler:nth-of-type(1):after {
+	content: '30';
+}
+.timeRuler:nth-of-type(2):after {
+	content: '60';
+}
+.timeRuler:nth-of-type(3):after {
+	content: '90';
+}
+.timeRuler:nth-of-type(4):after {
+	content: '120';
+	left: -25px;
+}
+.timeRuler:nth-of-type(5):after {
+	content: '150';
+	left: -25px;
+}
+.timeRuler:nth-of-type(6):after {
+	content: '180';
+	left: -25px;
+}
+.timeRuler:nth-of-type(7):after {
+	content: '210';
+	left: -25px;
+}
+.timeRuler:nth-of-type(8):after {
+	content: '240';
+	left: -25px;
+}
+
 </style>
