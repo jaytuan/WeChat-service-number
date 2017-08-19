@@ -36,9 +36,23 @@
                 </div>
           </div>
       </div>
-      <div v-show='isShow' class="gray_back">
-          <div class="friend_note_ul">
-          </div>
+      <div v-show='isShow' class="gray_back" ref="abc">
+          <ul class="friend_note_ul">
+              <li class="friend_note" v-for="item in friendNoteByPage">
+                  <div class="note_head">
+                      <span class="note_head_name">
+                        <img width="60px" src="//file.40017.cn/huochepiao/pc/stage/demo/1/head.png" class="note_head_img" ></img>
+                        <span class="friend_name">张依依</span>
+                      </span>
+                      <span class="note_title">《<span class="note_title_cont">{{item.noteTitle}}</span>》</span>
+                  </div>
+                  <p class="note_content">{{item.noteContent}}</p>
+                  <div class="note_foot">
+                      <span class="note_date">{{ new Date(item.createDate).getFullYear()+'.'+(new Date(item.createDate).getMonth()+1)+'.'+new Date(item.createDate).getDate() }}</span>
+                      <span class="praise" v-bind:class="{ click_praise : item.isPraise }" v-on:click="clickPraise(item.noteId)"></span>
+                  </div>
+              </li>
+          </ul>
       </div>
       <div class="content_center">
           <div class="read_hours">阅读时长<span class="digital">{{ readTimes }}</span>小时</div>
@@ -92,6 +106,7 @@ export default {
       holdDates:0,
       readWithYou:0,
       weekSignDate:[],
+      friendNoteByPage:[],
     }
   },
   computed: {
@@ -124,6 +139,18 @@ export default {
   methods:{
       showFreNotes:function(){
           this.isShow = !this.isShow;
+          this.getFriendNote(2);
+      },
+      clickPraise:function(id){
+          for(var i = 0;i<this.friendNoteByPage.length;i++){
+              var note = this.friendNoteByPage[i];
+              if(note.noteId == id){
+                  note.isPraise = !note.isPraise;
+                  //true 点赞了 false 取消点赞了
+                  this.praise(note.noteId,note.isPraise);
+                  break;
+              }
+          }
       },
       startRead:function(){
           if(this.isDone){
@@ -155,8 +182,48 @@ export default {
           request.send("inParam="+JSON.stringify(para));
           this.drawcanvas();
       },
+      //id:操作的笔记id;op: true点赞 false取消点赞
+      praise:function(id,op){
+            var that = this;
+            var para = {
+               "busiInfo":{
+                    "userId":"123",
+                    "noteId":id
+                },
+                "pubInfo":{
+                    "channelId":"wx",
+                    "opId":"wxuipowur3875dks"
+                }
+            }
+            var url = 'http://59.110.143.18:8080/read/doPraise.bz';
+            if(!op){
+                url = 'http://59.110.143.18:8080/read/cancelPraise.bz';
+            }
+            this.xhrQuest(para,url,function(){
+                if (this.status >= 200 && this.status < 400) {
+                    var backData = JSON.parse(this.responseText);
+                    console.log(backData.data);
+                }
+            });
+      },
       readEnd : function(){
-
+           var that = this;
+           var para = {
+               "busiInfo":{
+                    "userId":"123",
+                },
+                "pubInfo":{
+                    "channelId":"wx",
+                    "opId":"wxuipowur3875dks"
+                }
+            }
+            var url = 'http://59.110.143.18:8080/read/toEnd.bz';
+            this.xhrQuest(para,url,function(){
+                if (this.status >= 200 && this.status < 400) {
+                    var backData = JSON.parse(this.responseText);
+                    console.log(backData.data);
+                }
+            });
       },
       drawcanvas : function(secondsPosition){
             var t = 1;
@@ -188,16 +255,42 @@ export default {
             },1000);
            
        },
-       getImg: function(){
-                    var that = this;      
-                    that.$http({           //调用接口
-                        method:'GET',
-                        url:this.getImgUrl  //this指data
-                    }).then(function(response){  //接口返回数据
-                        this.imgList=response.data;                        
-                    },function(error){
-                    })
-        },
+      getFriendNote: function(index){
+          var that = this;
+          var para = {
+             "busiInfo":{
+                  "qryType":0,
+                  "userId":"wxuipowur3875dks",
+                  "pageSize":2,
+                  "pageNum":index
+              },
+              "pubInfo":{
+                  "channelId":"wx",
+                  "opId":"wxuipowur3875dks"
+              }
+          }
+          var url = 'http://59.110.143.18:8080/read/getReadNotes.bz';
+          this.xhrQuest(para,url,function(){
+              if (this.status >= 200 && this.status < 400) {
+                  var backData = JSON.parse(this.responseText);
+                  that.friendNoteByPage = that.friendNoteByPage.concat(backData.data);
+                  console.log(that.friendNoteByPage);
+              }
+
+          });
+      },
+      xhrQuest: function(params,url,callback){
+          var request = new XMLHttpRequest();
+          request.open('POST', url, true);
+          request.onload = callback;
+          request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+          request.send("inParam="+JSON.stringify(params));
+      },
+      listenScroll:function(){
+          //alert(window.innerHeight);
+          //alert(document.body.scrollTop);
+          //alert(this.$refs.abc.getBoundingClientRect().height);
+      }
   },
   created(){
       var startReadTime = parseInt(window.localStorage._startTime,10);
@@ -227,6 +320,7 @@ export default {
             this.drawcanvas(leftSeconds);
           }
       }
+      window.onscroll = this.listenScroll;
   },
   beforeCreate(){
       var that = this;
@@ -319,13 +413,13 @@ export default {
               }
           });
       }
-      function getFriendNote(){
+      function getFriendNote(index){
           var para = {
              "busiInfo":{
                   "qryType":0,
                   "userId":"wxuipowur3875dks",
-                  "pageSize":10,
-                  "pageNum":1
+                  "pageSize":2,
+                  "pageNum":index
               },
               "pubInfo":{
                   "channelId":"wx",
@@ -336,8 +430,7 @@ export default {
           xhrQuest(para,url,function(){
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);
-                  //that.weekSignDate = backData.data.weekSignDate;
-                  console.log(backData);
+                  that.friendNoteByPage = that.friendNoteByPage.concat(backData.data);
               }
 
           });
@@ -347,7 +440,7 @@ export default {
       getHoldDates();
       getNowOnline();
       getWeekSignUp();
-      getFriendNote();
+      getFriendNote(1);
   },
 }
 </script>
@@ -662,6 +755,76 @@ ul{
     top:8%;
     left:0;
     width:100%;
-    height:92%;
+    padding:58px 0;
+}
+.gray_back .friend_note_ul .friend_note{
+    width:658px;
+    margin:0 auto 58px;
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0px 0px #b8b8b8;
+    padding:0 30px;
+    color:#333;
+    font-size:30px;
+    position:relative;
+}
+.friend_note .note_head{
+    height:93px;
+    border-bottom:solid 1px #d6d6d6;
+    text-align:left;
+}
+.friend_note .note_head_img{
+    position:relative;
+    top:-30px;
+}
+.friend_note .note_head_name{
+    font-size:26px;
+}
+.friend_note .note_content{
+    text-align:left;
+    padding-top:12px;
+    padding-bottom:14px;
+}
+.friend_note .friend_name{
+    position:relative;
+    left:-65px;
+    top:15px;
+}
+.friend_note .note_title{
+    position:absolute;
+    right:30px;
+    top:43px;
+    font-weight:bold;
+}
+.friend_note .note_title .note_title_cont{
+    max-width:500px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:inline-block;
+    vertical-align:-8px;
+}
+.friend_note .note_foot{
+    text-align:left;
+    font-size:28px;
+    color:#999;
+    margin-bottom:4px;
+}
+.friend_note .note_foot .note_date{
+  
+}
+.friend_note .note_foot .praise{
+    display:inline-block;
+    width:28px;
+    height:26px;
+    background:url('../assets/greyheart.png?v=1') no-repeat;
+    background-size:28px;
+    position:absolute;
+    right:30px;
+    bottom:4px;
+}
+.friend_note .note_foot .click_praise{
+    background:url('../assets/redheart.png?v=1') no-repeat;
+    background-size:28px;
 }
 </style>
