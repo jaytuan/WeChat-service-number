@@ -77,9 +77,9 @@ export default {
       request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
       request.send("inParam="+JSON.stringify(data));
     }
-    var url1 = 'http://59.110.143.18:8080/read/getTopTen.bz'; // 排行榜
-    var url2 = "http://59.110.143.18:8080/read/getTotalTimes.bz"; // 总阅读时长
-    var url3 = "http://59.110.143.18:8080/read/getUserRank.bz";// 获取排行榜排名
+    var url1 = 'http://read.baizitech.cn/read/getTopTen.bz'; // 排行榜
+    var url2 = "http://read.baizitech.cn/read/getTotalTimes.bz"; // 总阅读时长
+    var url3 = "http://read.baizitech.cn/read/getUserRank.bz";// 获取排行榜排名
 
     var data2 = {
         "busiInfo": {

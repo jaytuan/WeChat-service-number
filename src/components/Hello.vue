@@ -174,7 +174,7 @@ export default {
               }
           };
           var request = new XMLHttpRequest();
-          request.open('POST', 'http://59.110.143.18:8080/read/toBegin.bz', true);
+          request.open('POST', 'http://read.baizitech.cn/read/toBegin.bz', true);
 
           request.onload = function() {
               if (this.status >= 200 && this.status < 400) {
@@ -199,9 +199,9 @@ export default {
                     "opId":"wxuipowur3875dks"
                 }
             }
-            var url = 'http://59.110.143.18:8080/read/doPraise.bz';
+            var url = 'http://read.baizitech.cn/read/doPraise.bz';
             if(!op){
-                url = 'http://59.110.143.18:8080/read/cancelPraise.bz';
+                url = 'http://read.baizitech.cn/read/cancelPraise.bz';
             }
             this.xhrQuest(para,url,function(){
                 if (this.status >= 200 && this.status < 400) {
@@ -221,7 +221,7 @@ export default {
                     "opId":"wxuipowur3875dks"
                 }
             }
-            var url = 'http://59.110.143.18:8080/read/toEnd.bz';
+            var url = 'http://read.baizitech.cn/read/toEnd.bz';
             this.xhrQuest(para,url,function(){
                 if (this.status >= 200 && this.status < 400) {
                     var backData = JSON.parse(this.responseText);
@@ -273,7 +273,7 @@ export default {
                   "opId":"wxuipowur3875dks"
               }
           }
-          var url = 'http://59.110.143.18:8080/read/getReadNotes.bz';
+          var url = 'http://read.baizitech.cn/read/getReadNotes.bz';
           this.xhrQuest(para,url,function(){
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);
@@ -352,7 +352,7 @@ export default {
                   "opId": "wxuipowur3875dks"
               }
           }
-          var url = 'http://59.110.143.18:8080/read/getTotalTimes.bz';
+          var url = 'http://read.baizitech.cn/read/getTotalTimes.bz';
           xhrQuest(para,url,function(){
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);
@@ -370,7 +370,7 @@ export default {
                   "opId": "wxuipowur3875dks"
               }
           }
-          var url = 'http://59.110.143.18:8080/read/getUserRank.bz';
+          var url = 'http://read.baizitech.cn/read/getUserRank.bz';
           xhrQuest(para,url,function(){
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);
@@ -388,7 +388,7 @@ export default {
                   "opId": "wxuipowur3875dks"
               }
           }
-          var url = 'http://59.110.143.18:8080/read/getSignNum.bz';
+          var url = 'http://read.baizitech.cn/read/getSignNum.bz';
           xhrQuest(para,url,function(){
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);
@@ -398,7 +398,7 @@ export default {
       }
       function getNowOnline(){
           var para = {};
-          var url = 'http://59.110.143.18:8080/read/getOnlineUserNum.bz';
+          var url = 'http://read.baizitech.cn/read/getOnlineUserNum.bz';
           xhrQuest(para,url,function(){
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);
@@ -416,7 +416,7 @@ export default {
                   "opId": "wxuipowur3875dks"
               }
           }
-          var url = 'http://59.110.143.18:8080/read/getWeekSignDate.bz';
+          var url = 'http://read.baizitech.cn/read/getWeekSignDate.bz';
           xhrQuest(para,url,function(){
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);
@@ -437,7 +437,7 @@ export default {
                   "opId":"wxuipowur3875dks"
               }
           }
-          var url = 'http://59.110.143.18:8080/read/getReadNotes.bz';
+          var url = 'http://read.baizitech.cn/read/getReadNotes.bz';
           xhrQuest(para,url,function(){
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);

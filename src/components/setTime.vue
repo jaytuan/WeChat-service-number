@@ -245,7 +245,7 @@ export default {
   		this.isOpen = !this.isOpen;
   	},
   	set:function(){
-  		var url = "http://59.110.143.18:8080/read/setReadTime.bz";
+  		var url = "http://read.baizitech.cn/read/setReadTime.bz";
   		var data = {
 		    "busiInfo": {
 		        "userId": "123",

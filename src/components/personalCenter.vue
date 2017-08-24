@@ -86,9 +86,9 @@ export default {
             "opId":"wxuipowur3875dks"
         }
     }
-    var url1 = "http://59.110.143.18:8080/read/getTotalTimes.bz";
-    var url2 = "http://59.110.143.18:8080/read/getSignNum.bz";
-    var url3 = "http://59.110.143.18:8080/read/getReadNotes.bz"; // 查看阅读笔记
+    var url1 = "http://read.baizitech.cn/read/getTotalTimes.bz";
+    var url2 = "http://read.baizitech.cn/read/getSignNum.bz";
+    var url3 = "http://read.baizitech.cn/read/getReadNotes.bz"; // 查看阅读笔记
 
     this.http(data,url1,function(res){
       that.duration = res.data.totalTimes;

@@ -45,7 +45,7 @@ export default {
 		}
 		else {
 			var request = new XMLHttpRequest();
-		    request.open('POST', 'http://59.110.143.18:8080/read/saveNote.bz', true);
+		    request.open('POST', 'http://read.baizitech.cn/read/saveNote.bz', true);
 
 		    request.onload = function() {
 		     // console.log(JSON.parse(this.responseText));
@@ -56,7 +56,7 @@ export default {
 
 		    request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 	    	request.send("inParam="+JSON.stringify(data));
-	    	this.$router.push({path:'/personalCenter'});
+	    	this.$router.push({path:'/publishSuc'});
 		}
   		
   		
