@@ -3,7 +3,7 @@
       <div class="top_page">
           <div class="page_head">
               <div class="flex_one head_img">
-                   <router-link to="/personalCenter" v-html="userHeadImg"></router-link>
+                   <router-link to="/personalCenter"><img width="60px" v-bind:src="userHeadImg"/></router-link>
               </div>
               <div class="flex_two"><div v-on:click="showFreNotes"><span class="note_title">书友笔记</span><em class="icons down" v-bind:class="{ up:isShow }"></em></div></div>
               <div class="flex_one">
@@ -114,10 +114,11 @@ export default {
       nomore:false,
       pageIndex:2,
       openid:'',
+      userHeadImg:'',
     }
   },
   computed: {
-    userHeadImg: function () {
+    /*userHeadImg: function () {
         var that = this;
         var para = {
            "busiInfo":{
@@ -137,7 +138,7 @@ export default {
                 return '<img width="60px" src= '+ headImgurl +' />';
             }
         });
-    },
+    },*/
     dates:function(){
         var a = [];
          //计算本周所有时间
@@ -355,11 +356,11 @@ export default {
   },
   beforeCreate(){
       var that = this;
-      function getUrlKey(name){
+      /*function getUrlKey(name){
         return decodeURIComponent((new RegExp('[?|&]'+name+'='+'([^&;]+?)(&|#|;|$)').exec(location.href)||[,""])[1].replace(/\+/g,'%20'))||null;
       }
       this.openid = getUrlKey("openid");
-      window.localStorage.openid = getUrlKey("openid");
+      */
       function xhrQuest(params,url,callback){
           var request = new XMLHttpRequest();
           request.open('POST', url, true);
@@ -470,6 +471,37 @@ export default {
               }
           });
       }
+       function getUserInfo(){
+        var headImgurl = '//file.40017.cn/huochepiao/pc/stage/demo/1/head.png';
+        var para = {
+          "busiInfo": {
+            //"openid": "osB8TwJRz0GjQKaI6Sxa70HeN5PI"
+            "openid": sessionStorage.getItem('openid')
+          },
+          "pubInfo": {
+            "channelId": "wx",
+            "opId": "wxuipowur3875dks"
+          }
+        };
+        var url = 'http://read.baizitech.cn/read/getUserInfo.bz';
+        xhrQuest(para,url,function(){
+          if (this.status >= 200 && this.status < 400) {
+            var backData = JSON.parse(this.responseText);
+            that.userHeadImg = backData.data.headimgurl;
+          }
+        });
+      }
+      function getOpenId(openid) {
+        var reg = new RegExp("(^|&)" + openid + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+      }
+      var openid= getOpenId('openid');
+      sessionStorage.setItem('openid',openid);
+      window.localStorage.openid = getOpenId('openid');
+
+      getUserInfo();
       getReadTime();
       getRankingLevel();
       getHoldDates();
@@ -571,7 +603,7 @@ ul{
 }
 .top_page .start_read .reading .dif_time{
     position:absolute;
-    left:175px;
+    left:155px;
     top:150px;
 }
 .top_page .start_read .reading .dif_minutes{
