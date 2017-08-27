@@ -11,13 +11,26 @@
       <div class="days">已签到<label>{{days}}</label>天</div>
     </div>
      <div class="notesTitle">阅读笔记</div>
-     <div class="notesList" v-for="item in list">
-       <div class="contentHeader">
-         <div class="contentTitle">
-           {{item.notetitle}}
-         </div>
-       </div>
-     </div>
+     
+     <div v-show="list.length > 0 " class="gray_back" ref="abc">
+          <ul class="friend_note_ul">
+              <li class="friend_note" v-for="item in list">
+                  <div class="note_head">
+                    
+                      <span class="note_title"><span class="note_title_cont">{{item.noteTitle}}</span></span>
+                      <span class="praise"></span>
+                      <span class="praiseNum">{{item.praiseNumber}}</span>
+                  </div>
+                  <p class="note_content">{{item.noteContent}}</p>
+                  <div class="note_foot">
+                      <span class="note_date">{{ new Date(item.createDate).getFullYear()+'.'+(new Date(item.createDate).getMonth()+1)+'.'+new Date(item.createDate).getDate() }}</span>
+                      
+                  </div>
+              </li>
+              <li class="loading" v-show="isLoading"></li>
+          </ul>
+      </div>
+      <div class="nolist" v-show="list.length == 0 || nomore == true">没有更多内容了</div>
   </div>
 </template>
 
@@ -29,31 +42,10 @@ export default {
       msg: 'Welcome to Your Vue.js App',
       duration:"",
       days:"",
-      list:[{
-        "id":"0",
-        "notetitle":"Hello",
-        "goodcounts":'9',
-        "notecontent":"hello world",
-        "time": "2017.10.11",
-      },{
-         "id":"1",
-        "notetitle":"Hello",
-        "goodcounts":'9',
-        "notecontent":"hello world",
-        "time": "2017.10.11",
-      },{
-         "id":"2",
-        "notetitle":"Hello",
-        "goodcounts":'9',
-        "notecontent":"hello world",
-        "time": "2017.10.11",
-      },{
-         "id":"3",
-        "notetitle":"Hello",
-        "goodcounts":'9',
-        "notecontent":"hello world",
-        "time": "2017.10.11",
-      }]
+      list:[],
+      pageIndex:1,
+      isLoading:false,
+      nomore:false,
     }
   },
   created:function() {
@@ -83,29 +75,46 @@ export default {
         }
     };
     var data3 = {
-      opId:"wxuipowur3875dks",
-      channelId:"wx",
-      userId:"123",
-      qryType:1,
-      pageSize:10,
-      pageNum:1
+      "busiInfo":{
+            "qryType":1,
+            "userId":"wxuipowur3875dks",
+            "pageSize":20,
+            "pageNum":this.pageIndex,
+        },
+        "pubInfo":{
+            "channelId":"wx",
+            "opId":"wxuipowur3875dks"
+        }
     }
-    var url1 = "http://59.110.143.18:8080/read/getTotalTimes.bz";
-    var url2 = "http://59.110.143.18:8080/read/getSignNum.bz";
-    var url3 = "http://59.110.143.18:8080/read/getReadNotes.bz"; // 查看阅读笔记
+    var url1 = "http://read.baizitech.cn/read/getTotalTimes.bz";
+    var url2 = "http://read.baizitech.cn/read/getSignNum.bz";
+    var url3 = "http://read.baizitech.cn/read/getReadNotes.bz"; // 查看阅读笔记
 
     this.http(data,url1,function(res){
       that.duration = res.data.totalTimes;
-
     });
     this.http(data,url2,function(res){
       that.days = res.data.signNum;
     });
     this.http(data3,url3,function(res) {
       console.log(res);
+      if(res.data.length != 0) {
+        that.list = res.data;
+      }
+      else {
+        that.nomore = true;
+      }
     })
     /// 'http://59.110.143.18:8080/read/getTotalTimes.bz'
    
+  },
+  methods:{
+     listenScroll:function(){
+          if(window.innerHeight + document.body.scrollTop + 10 > document.body.scrollHeight && !this.nomore){
+              this.isLoading = true; 
+             this.pageIndex++;
+          }
+      }
   }
 }
 </script>
@@ -197,5 +206,112 @@ export default {
 .notesList {
   margin-bottom: 20px;
   background-color: #fff;
+}
+.gray_back{
+    
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    z-index:11;
+}
+.gray_back .friend_note_ul{
+    background:#F2F2F2;
+    position:relative;
+    top:8%;
+    left:0;
+    width:100%;
+    padding:58px 0;
+}
+.gray_back .friend_note_ul .friend_note{
+    width:658px;
+    margin:0 auto 58px;
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0px 0px #b8b8b8;
+    padding:0 30px;
+    color:#333;
+    font-size:30px;
+    position:relative;
+}
+.friend_note .note_head{
+    height:93px;
+    border-bottom:solid 1px #d6d6d6;
+    text-align:left;
+}
+.friend_note .note_head_img{
+    position:relative;
+    top:-30px;
+}
+.friend_note .note_head_name{
+    font-size:26px;
+}
+.friend_note .note_content{
+    text-align:left;
+    padding-top:12px;
+    padding-bottom:14px;
+}
+.friend_note .friend_name{
+    position:relative;
+    left:-65px;
+    top:15px;
+}
+.friend_note .note_title{
+    position:absolute;
+    left:30px;
+    top:43px;
+    font-weight:bold;
+}
+.friend_note .praise{
+    display:inline-block;
+    width:28px;
+    height:26px;
+    background:url('../assets/redheart.png?v=1') no-repeat;
+    background-size:28px;
+    position:absolute;
+    right:70px;
+    top:43px;
+    font-weight:bold;
+}
+.friend_note .note_title .note_title_cont{
+    max-width:500px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:inline-block;
+    vertical-align:-8px;
+}
+.friend_note .note_foot{
+    text-align:right;
+    font-size:28px;
+    color:#999;
+    margin-bottom:4px;
+}
+.friend_note .note_foot .note_date{
+  
+}
+.friend_note .note_foot .praise{
+    display:inline-block;
+    width:28px;
+    height:26px;
+    background:url('../assets/greyheart.png?v=1') no-repeat;
+    background-size:28px;
+    position:absolute;
+    right:30px;
+    bottom:4px;
+}
+.friend_note .note_foot .click_praise{
+    background:url('../assets/redheart.png?v=1') no-repeat;
+    background-size:28px;
+}
+.nolist {
+  font-size: 28px;
+  color: #5E626C;
+}
+.praiseNum {
+  position: absolute;
+  right: 30px;
+  top: 38px;
+  font-size: 28px;
+  color: #5E626C;
 }
 </style>

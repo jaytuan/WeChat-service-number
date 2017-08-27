@@ -8,26 +8,26 @@
     <div class="rankingMid">
       <div class="left">
         <div class="crown"></div>
-        <div class="crownImg"></div>
+        <div class="crownImg"><img :src="listThree[1].avator" alt=""></div>
         <div class="userInfo">
-          <div class="userName">{{lists[1].totalTimes}}</div>
-          <div class="readTime">{{lists[1].totalTimes}}小时</div>
+          <div class="userName">{{listThree[1].nickName}}</div>
+          <div class="readTime">{{listThree[1].totalTimes}}小时</div>
         </div>
       </div>
       <div class="mid">
         <div class="crownMid"></div>
-        <div class="crownImgMid"></div>
+        <div class="crownImgMid"><img :src="listThree[0].avator" alt=""></div>
         <div class="userInfo">
-          <div class="userNameMid">{{lists[1].totalTimes}}</div>
-          <div class="readTimeMid">{{lists[1].totalTimes}}小时</div>
+          <div class="userNameMid">{{listThree[0].nickName}}</div>
+          <div class="readTimeMid">{{listThree[0].totalTimes}}小时</div>
         </div>
       </div>
       <div class="right">
         <div class="crownRight"></div>
-        <div class="crownImgRight"></div>
+        <div class="crownImgRight"><img :src="listThree[2].avator" alt=""></div>
         <div class="userInfo">
-          <div class="userNameRight">{{lists[1].totalTimes}}</div>
-          <div class="readTimeRight">{{lists[1].totalTimes}}小时</div>
+          <div class="userNameRight">{{listThree[2].nickName}}</div>
+          <div class="readTimeRight">{{listThree[2].totalTimes}}小时</div>
         </div>
       </div>
     </div>
@@ -37,8 +37,8 @@
   	</div>
   	<div class="ranking">
   		<ul class="rankingUl">
-  			<li v-for="item in listThree">
-  				<label class="rankingRace">{{item.id}}</label>
+  			<li v-for="(item,index) in listThreeOther">
+  				<label class="rankingRace">{{index+1}}</label>
           <img :src="item.avator" alt="" class="rangkingImg">
           <label for="" class="rankingName">{{item.nickName}}</label>
           <label for="" class="rankingTime">{{item.totalTimes}}小时</label>
@@ -77,9 +77,9 @@ export default {
       request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
       request.send("inParam="+JSON.stringify(data));
     }
-    var url1 = 'http://59.110.143.18:8080/read/getTopTen.bz'; // 排行榜
-    var url2 = "http://59.110.143.18:8080/read/getTotalTimes.bz"; // 总阅读时长
-    var url3 = "http://59.110.143.18:8080/read/getUserRank.bz";// 获取排行榜排名
+    var url1 = 'http://read.baizitech.cn/read/getTopTen.bz'; // 排行榜
+    var url2 = "http://read.baizitech.cn/read/getTotalTimes.bz"; // 总阅读时长
+    var url3 = "http://read.baizitech.cn/read/getUserRank.bz";// 获取排行榜排名
 
     var data2 = {
         "busiInfo": {
@@ -100,9 +100,9 @@ export default {
       }
     }
     this.http("",url1,function(res) {
-      if(res) {
+      if(res && res.data.length > 0) {
         that.lists = res.data;
-        console.log(that.lists)
+        console.log(that.lists);
         that.listThree = res.data.slice(0,3);
         that.listThreeOther = res.data.slice(3);
       }
@@ -208,34 +208,31 @@ export default {
   background-size: cover;
   z-index: 25;
 }
-.crownImg {
+.crownImg img{
   width: 99.7px;
   height: 100.7px;
+  border-radius: 50%;
   position: absolute;
   top:82.5px;
   left: 116px;
-  background: url("../assets/head.png");
-  background-size: cover;
   z-index: 20;
 }
-.crownImgMid {
+.crownImgMid img{
   width: 126.6px;
   height: 127.8px;
   position: absolute;
+  border-radius: 50%;
   top: 77.9px;
   left: 48px;
-  background: url("../assets/head.png");
-  background-size: cover;
   z-index: 20;
 }
-.crownImgRight {
+.crownImgRight img{
   width: 99.7px;
   height: 100.7px;
+  border-radius: 50%;
   position: absolute;
   top:82.5px;
   right: 116.5px;
-  background: url("../assets/head.png");
-  background-size: cover;
   z-index: 20;
 }
 .userInfo {
