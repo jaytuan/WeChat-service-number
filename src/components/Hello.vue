@@ -22,7 +22,7 @@
                             <em class="icons second_hand" v-bind:style="{left:leftValue+'px',top:topValue+'px'}"></em>
                         </span>
                         <div class="dif_time">
-                              <span class="dif_minutes">{{ leftTime }}'</span>
+                              <span class="dif_minutes">{{ leftTimeStr }}'</span>
                               <span class="today">{{ nowDate }}</span>
                         </div>
                 </div>
@@ -85,9 +85,9 @@
       <div class="read_all_pep">
           <span>当前和您一同阅读<span class="digital">{{ readWithYou }}</span>人</span>
       </div>
-      <div class="write_note">
-             <router-link to="/writeNotes">写笔记</router-link>
-      </div>
+      <router-link to="/writeNotes">
+         <div class="write_note">写笔记</div>
+      </router-link>
   </div>
 </template>
 <script>
@@ -101,6 +101,7 @@ export default {
       topValue:-220,
       leftValue:0,
       leftTime:30,
+      leftTimeStr:30,
       leftRot:135,
       rightRot:-45,
       readTimes:0,
@@ -112,12 +113,30 @@ export default {
       isLoading:false,
       nomore:false,
       pageIndex:2,
+      openid:'',
     }
   },
   computed: {
     userHeadImg: function () {
-      var headImgurl = '//file.40017.cn/huochepiao/pc/stage/demo/1/head.png';
-      return '<img width="60px" src= '+ headImgurl +' />';
+        var that = this;
+        var para = {
+           "busiInfo":{
+                "openid":that.openid,
+            },
+            "pubInfo":{
+                "channelId":"wx",
+                "opId":that.openid
+            }
+        }
+        var url = 'http://read.baizitech.cn/read/getUserInfo.bz';
+        this.xhrQuest(para,url,function(){
+            if (this.status >= 200 && this.status < 400) {
+                var backData = JSON.parse(this.responseText);
+                console.log('haha'+JSON.stringify(backData.data));
+                var headImgurl = backData.data.avator;
+                return '<img width="60px" src= '+ headImgurl +' />';
+            }
+        });
     },
     dates:function(){
         var a = [];
@@ -166,15 +185,15 @@ export default {
          //开始阅读接口
          var para = {
               "busiInfo": {
-                  "userId": "123"
+                  "userId": this.openid
               },
               "pubInfo": {
                   "channelId": "wx",
-                  "opId": "wxuipowur3875dks"
+                  "opId": this.openid
               }
           };
           var request = new XMLHttpRequest();
-          request.open('POST', 'http://59.110.143.18:8080/read/toBegin.bz', true);
+          request.open('POST', 'http://read.baizitech.cn/read/toBegin.bz', true);
 
           request.onload = function() {
               if (this.status >= 200 && this.status < 400) {
@@ -191,17 +210,17 @@ export default {
             var that = this;
             var para = {
                "busiInfo":{
-                    "userId":"123",
+                    "userId":that.openid,
                     "noteId":id
                 },
                 "pubInfo":{
                     "channelId":"wx",
-                    "opId":"wxuipowur3875dks"
+                    "opId":that.openid
                 }
             }
-            var url = 'http://59.110.143.18:8080/read/doPraise.bz';
+            var url = 'http://read.baizitech.cn/read/doPraise.bz';
             if(!op){
-                url = 'http://59.110.143.18:8080/read/cancelPraise.bz';
+                url = 'http://read.baizitech.cn/read/cancelPraise.bz';
             }
             this.xhrQuest(para,url,function(){
                 if (this.status >= 200 && this.status < 400) {
@@ -214,18 +233,17 @@ export default {
            var that = this;
            var para = {
                "busiInfo":{
-                    "userId":"123",
+                    "userId":that.openid,
                 },
                 "pubInfo":{
                     "channelId":"wx",
-                    "opId":"wxuipowur3875dks"
+                    "opId":that.openid
                 }
             }
-            var url = 'http://59.110.143.18:8080/read/toEnd.bz';
+            var url = 'http://read.baizitech.cn/read/toEnd.bz';
             this.xhrQuest(para,url,function(){
                 if (this.status >= 200 && this.status < 400) {
                     var backData = JSON.parse(this.responseText);
-                    console.log(backData.data);
                 }
             });
       },
@@ -240,6 +258,7 @@ export default {
                  t=1;
                  that.leftRot = 135;
                  that.leftTime--;
+                 that.leftTimeStr = that.leftTime;
                  if(that.leftTime<=0){
                     that.isDone = true;
                     that.showStartBtn = false;
@@ -264,16 +283,16 @@ export default {
           var para = {
              "busiInfo":{
                   "qryType":0,
-                  "userId":"wxuipowur3875dks",
+                  "userId":that.openid,
                   "pageSize":20,
                   "pageNum":index
               },
               "pubInfo":{
                   "channelId":"wx",
-                  "opId":"wxuipowur3875dks"
+                  "opId":that.openid
               }
           }
-          var url = 'http://59.110.143.18:8080/read/getReadNotes.bz';
+          var url = 'http://read.baizitech.cn/read/getReadNotes.bz';
           this.xhrQuest(para,url,function(){
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);
@@ -327,6 +346,7 @@ export default {
             this.isDone = false;
             var leftMinutes = Math.floor((now - startReadTime)/1000/60);
             this.leftTime = 30-leftMinutes;
+            this.leftTimeStr = this.leftTime < 10 ? ('0'+this.leftTime) : this.leftTime;
             var leftSeconds = 60-(now - startReadTime)/1000%60;
             this.drawcanvas(leftSeconds);
           }
@@ -335,6 +355,11 @@ export default {
   },
   beforeCreate(){
       var that = this;
+      function getUrlKey(name){
+        return decodeURIComponent((new RegExp('[?|&]'+name+'='+'([^&;]+?)(&|#|;|$)').exec(location.href)||[,""])[1].replace(/\+/g,'%20'))||null;
+      }
+      this.openid = getUrlKey("openid");
+      window.localStorage.openid = getUrlKey("openid");
       function xhrQuest(params,url,callback){
           var request = new XMLHttpRequest();
           request.open('POST', url, true);
@@ -345,14 +370,14 @@ export default {
       function getReadTime(){
           var para = {
               "busiInfo": {
-                  "userId": "123"
+                  "userId": that.openid,
               },
               "pubInfo": {
                   "channelId": "wx",
-                  "opId": "wxuipowur3875dks"
+                  "opId": that.openid,
               }
           }
-          var url = 'http://59.110.143.18:8080/read/getTotalTimes.bz';
+          var url = 'http://read.baizitech.cn/read/getTotalTimes.bz';
           xhrQuest(para,url,function(){
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);
@@ -363,14 +388,14 @@ export default {
       function getRankingLevel(){
           var para = {
               "busiInfo": {
-                  "userId": "123"
+                  "userId": that.openid,
               },
               "pubInfo": {
                   "channelId": "wx",
-                  "opId": "wxuipowur3875dks"
+                  "opId": that.openid,
               }
           }
-          var url = 'http://59.110.143.18:8080/read/getUserRank.bz';
+          var url = 'http://read.baizitech.cn/read/getUserRank.bz';
           xhrQuest(para,url,function(){
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);
@@ -381,14 +406,14 @@ export default {
       function getHoldDates(){
           var para = {
               "busiInfo": {
-                  "userId": "123"
+                  "userId": that.openid,
               },
               "pubInfo": {
                   "channelId": "wx",
-                  "opId": "wxuipowur3875dks"
+                  "opId": that.openid,
               }
           }
-          var url = 'http://59.110.143.18:8080/read/getSignNum.bz';
+          var url = 'http://read.baizitech.cn/read/getSignNum.bz';
           xhrQuest(para,url,function(){
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);
@@ -398,7 +423,7 @@ export default {
       }
       function getNowOnline(){
           var para = {};
-          var url = 'http://59.110.143.18:8080/read/getOnlineUserNum.bz';
+          var url = 'http://read.baizitech.cn/read/getOnlineUserNum.bz';
           xhrQuest(para,url,function(){
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);
@@ -409,14 +434,14 @@ export default {
       function getWeekSignUp(){
           var para = {
               "busiInfo": {
-                  "userId": "123"
+                  "userId": that.openid,
               },
               "pubInfo": {
                   "channelId": "wx",
-                  "opId": "wxuipowur3875dks"
+                  "opId": that.openid,
               }
           }
-          var url = 'http://59.110.143.18:8080/read/getWeekSignDate.bz';
+          var url = 'http://read.baizitech.cn/read/getWeekSignDate.bz';
           xhrQuest(para,url,function(){
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);
@@ -428,22 +453,21 @@ export default {
           var para = {
              "busiInfo":{
                   "qryType":0,
-                  "userId":"wxuipowur3875dks",
+                  "userId":that.openid,
                   "pageSize":20,
                   "pageNum":index
               },
               "pubInfo":{
                   "channelId":"wx",
-                  "opId":"wxuipowur3875dks"
+                  "opId":that.openid
               }
           }
-          var url = 'http://59.110.143.18:8080/read/getReadNotes.bz';
+          var url = 'http://read.baizitech.cn/read/getReadNotes.bz';
           xhrQuest(para,url,function(){
               if (this.status >= 200 && this.status < 400) {
                   var backData = JSON.parse(this.responseText);
                   that.friendNoteByPage = that.friendNoteByPage.concat(backData.data);
               }
-
           });
       }
       getReadTime();
@@ -750,6 +774,7 @@ ul{
     font-size:45px;
     letter-spacing:10px;
     margin:0 auto 30px;
+    box-shadow:0px 0px 25px #75b1f5;
 }
 .gray_back{
     position:absolute;
