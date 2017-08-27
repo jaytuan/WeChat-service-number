@@ -41,7 +41,9 @@ export default {
 		    }
 		};
 		if(this.notestitle == "" || this.noteContent == ""){
+			var that = this;
 			this.status = false;
+			setTimeout(function(){that.status = true},1000);
 		}
 		else {
 			var request = new XMLHttpRequest();
