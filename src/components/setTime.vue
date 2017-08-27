@@ -65,9 +65,9 @@
     	</div>
     </div>
     <div class="readWarn">阅读时长(<label for="">{{duration}}</label>)</div>
-    <div class="chooseHour">
+    <div class="chooseHour" @touchstart="start2" @touchend="end2" >
     	<div class="tri"></div>
-    	<div class="timeline" @touchstart="start2" @touchend="end2" v-bind:style="{transform: translateX2}">
+    	<div class="timeline chooseLength" v-bind:style="{transform: translateX2}">
     		<div class="timeRuler"></div>
     		<div class="timeRuler"></div>
     		<div class="timeRuler"></div>
@@ -99,8 +99,8 @@ export default {
       endX2:0,
       lastDis2:0,
       disX2:0,
-      isBoundry2:false,
-      translateX2:"translateX(310px)",
+      isBoundry2:true,
+      translateX2:"",
       duration:30,
       isOpen:false,
       sec:"00",
@@ -180,65 +180,69 @@ export default {
   		var disX3 = 0;
   		this.endX2 = e.changedTouches[0].clientX;
 		this.disX2 = this.endX2 - this.startX2 + this.lastDis2;
+		console.log(this.disX2)
 		// 第一次触碰左边际
-		if(this.disX2 >= 310 && !this.isBoundry2){
+		if(this.disX2 >= 0 && !this.isBoundry2){
 			// 指针指到1的时候，往右偏了310px
 			this.isBoundry2 = true;
-			this.disX2 = 310;
+			this.disX2 = 0;
 			this.lastDis2 = this.disX2;
 		}
-		else if(this.disX2 >= 310 && this.isBoundry2) {
-			this.disX2 = 310;
+		else if(this.disX2 >= 0 && this.isBoundry2) {
+			this.disX2 = 0;
 			this.lastDis2 = this.lastDis2;
 		}
-		else if(this.disX2 <= -138 && !this.isBoundry2){
+		else if(this.disX2 <= -448 && !this.isBoundry2){
 			this.isBoundry2 = true;
-			this.disX2 = -138;
+			this.disX2 = -448;
 			this.lastDis2 = this.disX2;
 		}
-		else if(this.disX2 <= -138 && this.isBoundry2){
-			this.disX2 = -138;
+		else if(this.disX2 <= -448 && this.isBoundry2){
+			this.disX2 = -448;
 			this.lastDis2 = this.lastDis2;
 		}
 		else {
 			this.isBoundry2 = false;
 			this.lastDis2 = this.disX2;
 		}
-		var duration = Math.ceil((374-this.disX2)*210/448);
-		console.log(duration);
+		
+		var duration = Math.ceil((64-this.disX2)*210/448);
 		/*if(duration%30 > 15) {*/
-			this.duration = (Math.ceil(duration/30))*30;
+		this.duration = (Math.ceil(duration/30))*30;
+		console.log(duration+","+this.duration);
 		//}
 		/*else {
 			this.duration = (Math.ceil(duration/30)-1)*30;
 		}*/
-		console.log(this.disX2);
-		if(this.disX2 > 246 && this.disX2 <= 310){
-			disX3 = 246;
+		if(this.disX2 > -64 && this.disX2 < 0){
+			disX3 = -64;
 		}
-		else if(this.disX2 > 182 && this.disX2 <= 246) {
-			disX3 = 182;
+		else if(this.disX2 > -128 && this.disX2 <= -64) {
+			disX3 = -128;
 		}
-		else if(this.disX2 > 118 && this.disX2 <= 182) {
-			disX3 = 118;
+		else if(this.disX2 > -192 && this.disX2 <= -128) {
+			disX3 = -192;
 		}
-		else if(this.disX2 > 54 && this.disX2 <= 118) {
-			disX3 = 54;
+		else if(this.disX2 > -256 && this.disX2 <= -192) {
+			disX3 = -256;
 		}
-		else if(this.disX2 > -10 && this.disX2 <= 54) {
-			disX3 = -10;
+		else if(this.disX2 > -320 && this.disX2 <= -256) {
+			disX3 = -320;
 		}
-		else if(this.disX2 > -74 && this.disX2 <= -10) {
-			disX3 = -74;
+		else if(this.disX2 > -384 && this.disX2 <= -320) {
+			disX3 = -384;
 		}
-		else if(this.disX2 > -138 && this.disX2 <= -74) {
-			disX3 = -138;
+		else if(this.disX2 > -448 && this.disX2 <= -384) {
+			disX3 = -448;
+		}
+		else if(this.disX2 >= 0){
+			disX3 = 0;
 		}
 		else {
-			disX3 = 310;
+			disX3 = -448;
 		}
 		this.translateX2 = "translateX("+disX3+"px)"
-		window.localStorage._startTime = this.duration;
+		/*window.localStorage._startTime = this.duration;*/
 		return this.translateX2;
   	},
   	toggle:function(){
@@ -557,6 +561,9 @@ export default {
 .timeRuler:nth-of-type(8):after {
 	content: '240';
 	left: -25px;
+}
+.chooseLength {
+	padding-left: 355px !important;
 }
 
 </style>
