@@ -1,7 +1,7 @@
 <template>
   <div class="publishSuc">
   	<div class="header">
-	    <div class="close"></div>
+	    <router-link to="/personalCenter" class="close"></router-link>
 	    <div class="title">发表成功</div>
     </div>
     <div class="imgsucc">
@@ -20,7 +20,14 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
-  }
+  },
+  created:function(){
+    var that = this;
+    setTimeout(function(){
+      that.$router.push('/personalCenter')
+    },1000)
+  },
+ 
 }
 </script>
 <style scoped>

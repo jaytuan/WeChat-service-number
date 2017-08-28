@@ -380,7 +380,7 @@ export default {
           }
           var url = 'http://read.baizitech.cn/read/getTotalTimes.bz';
           xhrQuest(para,url,function(){
-              if (this.status >= 200 && this.status < 400) {
+              if (this.status >= 200 && this.status < 400 && res.data != "") {
                   var backData = JSON.parse(this.responseText);
                   that.readTimes = backData.data.totalTimes;
               }
@@ -398,7 +398,7 @@ export default {
           }
           var url = 'http://read.baizitech.cn/read/getUserRank.bz';
           xhrQuest(para,url,function(){
-              if (this.status >= 200 && this.status < 400) {
+              if (this.status >= 200 && this.status < 400 && res.data != "") {
                   var backData = JSON.parse(this.responseText);
                   that.rankingLevel = backData.data.userRank;
               }
@@ -851,6 +851,7 @@ ul{
     text-align:left;
 }
 .friend_note .note_head_img{
+    border-radius: 50%;
     position:relative;
     top:-30px;
 }

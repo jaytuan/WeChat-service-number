@@ -38,7 +38,7 @@
   	<div class="ranking">
   		<ul class="rankingUl">
   			<li v-for="(item,index) in listThreeOther">
-  				<label class="rankingRace">{{index+1}}</label>
+  				<label class="rankingRace">{{index+4}}</label>
           <img :src="item.avator" alt="" class="rangkingImg">
           <label for="" class="rankingName">{{item.nickName}}</label>
           <label for="" class="rankingTime">{{item.totalTimes}}小时</label>
@@ -54,8 +54,8 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
-      time:"",
-      race:"",
+      time:0,
+      race:0,
       lists:[],
       listThree:[],
       listThreeOther:[],
@@ -110,12 +110,17 @@ export default {
       console.log(that.listThree);
     })
     this.http(data2,url2,function(res) {
-      that.time = res.data.totalTimes;
-      console.log(res);
+      if(res.data != "" && res.statusCode == 200){
+        that.time = res.data.totalTimes;
+        console.log(res);
+      }
+      
     })
     this.http(data3,url3,function(res){
-      that.race = res.data.userRank;
-      console.log(res)
+      if(res.data != "" && res.statusCode == 200){
+        that.race = res.data.userRank;
+        console.log(res)
+      }
     })
   }
 }
@@ -354,6 +359,7 @@ padding-left: 68px;
   display: block;
   height: 50px;
   width: 50px;
+  border-radius: 50%;
 }
 .rankingName {
   position: absolute;
