@@ -67,23 +67,23 @@ export default {
     }
     var data = {
         "busiInfo": {
-            "userId": "123"
+            "userId": sessionStorage.getItem('openid')
         },
         "pubInfo": {
             "channelId": "wx",
-            "opId": "wxuipowur3875dks"
+            "opId": sessionStorage.getItem('openid')
         }
     };
     var data3 = {
       "busiInfo":{
             "qryType":1,
-            "userId":"wxuipowur3875dks",
+            "userId":sessionStorage.getItem('openid'),
             "pageSize":20,
             "pageNum":this.pageIndex,
         },
         "pubInfo":{
             "channelId":"wx",
-            "opId":"wxuipowur3875dks"
+            "opId":sessionStorage.getItem('openid')
         }
     }
     var url1 = "http://read.baizitech.cn/read/getTotalTimes.bz";

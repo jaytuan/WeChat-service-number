@@ -3,7 +3,7 @@
     <div class="header">
 	    <router-link to="/" class="back"></router-link>
 	    <div class="title">设置时间</div>
-	    <div class="set" @click="set">设置</div>
+	    <div class="set" @click="set">保存</div>
     </div>
     <div class="openClose">
     	<label for="" class="open">开启提醒</label>
@@ -252,14 +252,14 @@ export default {
   		var url = "http://read.baizitech.cn/read/setReadTime.bz";
   		var data = {
 		    "busiInfo": {
-		        "userId": "123",
+		        "userId": sessionStorage.getItem('openid'),
 		        "times": this.duration,
 		        "remindTime": this.time + ":"+this.sec,
 		        "isOpen": this.isOpen
 		    },
 		    "pubInfo": {
 		        "channelId": "wx",
-		        "opId": "wxuipowur3875dks"
+		        "opId": sessionStorage.getItem('openid')
 		    }
 		}
   		var request = new XMLHttpRequest();

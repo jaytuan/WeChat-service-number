@@ -31,13 +31,13 @@ export default {
   	publish:function() {
   		var data = {
 		    "busiInfo": {
-		        "userId": "123",
+		        "userId": sessionStorage.getItem('openid'),
 		        "noteTitle": this.notestitle,
 		        "noteContent": this.content
 		    },
 		    "pubInfo": {
 		        "channelId": "wx",
-		        "opId": "wxuipowur3875dks"
+		        "opId": sessionStorage.getItem('openid')
 		    }
 		};
 		if(this.notestitle == "" || this.noteContent == ""){

@@ -83,20 +83,20 @@ export default {
 
     var data2 = {
         "busiInfo": {
-            "userId": "123"
+            "userId": sessionStorage.getItem('openid')
         },
         "pubInfo": {
             "channelId": "wx",
-            "opId": "wxuipowur3875dks"
+            "opId": sessionStorage.getItem('openid')
         }
     }
     var data3 = {
       "busiInfo": {
-          "userId": "123"
+          "userId": sessionStorage.getItem('openid')
       },
       "pubInfo": {
           "channelId": "wx",
-          "opId": "wxuipowur3875dks"
+          "opId": sessionStorage.getItem('openid')
       }
     }
     this.http("",url1,function(res) {
