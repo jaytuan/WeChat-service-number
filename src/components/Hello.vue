@@ -41,8 +41,8 @@
               <li class="friend_note" v-for="item in friendNoteByPage">
                   <div class="note_head">
                       <span class="note_head_name">
-                        <img width="60px" src="//file.40017.cn/huochepiao/pc/stage/demo/1/head.png" class="note_head_img" ></img>
-                        <span class="friend_name">张依依</span>
+                        <img width="60px" src="{{item.avator}}" class="note_head_img" ></img>
+                        <span class="friend_name">{{item.nickName}}</span>
                       </span>
                       <span class="note_title">《<span class="note_title_cont">{{item.noteTitle}}</span>》</span>
                   </div>
