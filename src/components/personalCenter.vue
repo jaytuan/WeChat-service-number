@@ -2,8 +2,8 @@
   <div class="personalCenter">
     <div class="personalHeader">
       <router-link to="/" class="back"></router-link>
-      <div class="imgHead"></div>
-      <div class="userNicks">abcdsafsdngfakijrh</div>
+      <div class="imgHead"><img :src="userinfo.headimgurl" alt=""></div>
+      <div class="userNicks">{{userinfo.nickname}}</div>
     </div>
     <div class="readSome">
       <div class="duration">阅读时长<label>{{duration}}</label>小时</div>
@@ -40,9 +40,10 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
-      duration:"",
-      days:"",
+      duration:0,
+      days:0,
       list:[],
+      userinfo:{},
       pageIndex:1,
       isLoading:false,
       nomore:false,
@@ -86,15 +87,30 @@ export default {
             "opId":sessionStorage.getItem('openid')
         }
     }
+    var data4 ={
+      "busiInfo": {
+        //"openid": "osB8TwJRz0GjQKaI6Sxa70HeN5PI"
+        "openid": sessionStorage.getItem('openid')
+      },
+      "pubInfo": {
+        "channelId": "wx",
+        "opId": sessionStorage.getItem('openid')
+      }
+    }
     var url1 = "http://read.baizitech.cn/read/getTotalTimes.bz";
     var url2 = "http://read.baizitech.cn/read/getSignNum.bz";
     var url3 = "http://read.baizitech.cn/read/getReadNotes.bz"; // 查看阅读笔记
+    var url4 = 'http://read.baizitech.cn/read/getUserInfo.bz';// 获取个人信息
 
     this.http(data,url1,function(res){
-      that.duration = res.data.totalTimes;
+      if(res && res.statusCode == 200) {
+        that.duration = res.data.totalTimes;
+      }
     });
     this.http(data,url2,function(res){
-      that.days = res.data.signNum;
+      if(res && res.statusCode == 200) {
+        that.days = res.data.signNum;
+      }
     });
     this.http(data3,url3,function(res) {
       console.log(res);
@@ -103,6 +119,12 @@ export default {
       }
       else {
         that.nomore = true;
+      }
+    })
+    this.http(data4,url4,function(res) {
+      if(res && res.statusCode == 200) {
+        that.userinfo = res.data;
+        console.log(that.userinfo);
       }
     })
     /// 'http://59.110.143.18:8080/read/getTotalTimes.bz'
@@ -140,12 +162,17 @@ export default {
   border-top: 5px solid #fff;
   transform:rotate(315deg);
 }
-.imgHead {
-  background: url("../assets/head.png");
+.imgHead{
   height: 118px;
   width: 118px;
   margin-left: 316px;
-  background-size: cover;
+  border-radius: 50%;
+}
+.imgHead img {
+  display: inline-block;
+  height: 118px;
+  width: 118px;
+  border-radius: 50%;
 }
 .userNicks {
   font-size: 34px;
